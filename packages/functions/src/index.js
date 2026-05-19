@@ -1,7 +1,7 @@
-import {onRequest} from 'firebase-functions/v2/https';
-import {onMessagePublished} from 'firebase-functions/v2/pubsub';
-import {onTaskDispatched} from 'firebase-functions/v2/tasks';
-import {onSchedule} from 'firebase-functions/v2/scheduler';
+import { onRequest } from 'firebase-functions/v2/https';
+import { onMessagePublished } from 'firebase-functions/v2/pubsub';
+import { onTaskDispatched } from 'firebase-functions/v2/tasks';
+import { onSchedule } from 'firebase-functions/v2/scheduler';
 import apiHandler from './handlers/api';
 import apiSaHandler from './handlers/apiSa';
 import authHandler from './handlers/auth';
@@ -27,39 +27,39 @@ export const embedApp = onRequest(
 // ---------------------- API handlers ----------------------
 // Main API endpoints for the embedded admin app
 export const api = onRequest(
-  {timeoutSeconds: 540, memory: '1GiB', invoker: 'public'},
+  { timeoutSeconds: 540, memory: '1GiB', invoker: 'public' },
   apiHandler.callback()
 );
 
 export const apiSa = onRequest(
-  {timeoutSeconds: 540, memory: '1GiB', invoker: 'public'},
+  { timeoutSeconds: 540, memory: '1GiB', invoker: 'public' },
   apiSaHandler.callback()
 );
 
 // ---------------------- Auth handlers ----------------------
 // OAuth flow and session management
-export const auth = onRequest({memory: '1GiB', invoker: 'public'}, authHandler.callback());
+export const auth = onRequest({ memory: '1GiB', invoker: 'public' }, authHandler.callback());
 
-export const authSa = onRequest({memory: '512MiB', invoker: 'public'}, authSaHandler.callback());
+export const authSa = onRequest({ memory: '512MiB', invoker: 'public' }, authSaHandler.callback());
 
 // ---------------------- Webhook handlers ----------------------
 // Shopify webhook endpoints (HMAC verified)
 export const webhook = onRequest(
-  {timeoutSeconds: 30, memory: '512MiB', invoker: 'public'},
+  { timeoutSeconds: 30, memory: '512MiB', invoker: 'public' },
   webhookHandler.callback()
 );
 
 // ---------------------- Client API handlers ----------------------
 // Public API for storefront scripts (CORS enabled)
 export const clientApi = onRequest(
-  {timeoutSeconds: 30, memory: '512MiB', invoker: 'public'},
+  { timeoutSeconds: 30, memory: '512MiB', invoker: 'public' },
   clientApiHandler.callback()
 );
 
 // ---------------------- PubSub handlers ----------------------
 // Background processing via Pub/Sub messages
 export const backgroundHandling = onMessagePublished(
-  {topic: 'backgroundHandling', timeoutSeconds: 540, memory: '1GiB'},
+  { topic: 'backgroundHandling', timeoutSeconds: 540, memory: '1GiB' },
   subscribeBackgroundHandler
 );
 
@@ -83,6 +83,6 @@ export const enqueueSubscriber = onTaskDispatched(
 // ---------------------- Schedule handlers ----------------------
 // Cron jobs for periodic tasks
 export const dailyCron = onSchedule(
-  {schedule: '0 0 * * *', timeoutSeconds: 540, memory: '1GiB'},
+  { schedule: '0 0 * * *', timeoutSeconds: 540, memory: '1GiB' },
   dailyCronHandler
 );

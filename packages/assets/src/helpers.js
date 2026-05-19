@@ -116,14 +116,34 @@ function createApi() {
   if (isEmbeddedAppEnv) {
     const fetchFunction = fetch;
     return async (uri, options = {}) => {
+      options.headers = options.headers || {};
+      options.headers.accept = options.headers.accept || 'application/json';
       if (options.body) {
         options.body = JSON.stringify(options.body);
-        options.headers = options.headers || {};
         options.headers['Content-Type'] = 'application/json';
       }
       const response = await fetchFunction(prefix + uri, options);
       checkHeadersForReauthorization(response.headers, embedApp);
-      return await response.json();
+      const responseText = await response.text();
+      let data = null;
+      try {
+        data = responseText ? JSON.parse(responseText) : null;
+      } catch (e) {
+        const error = new Error(
+          `Expected JSON response from ${prefix + uri}, got: ${responseText.slice(0, 120)}`
+        );
+        error.status = response.status;
+        error.cause = e;
+        error.responseText = responseText;
+        throw error;
+      }
+      if (!response.ok) {
+        const error = new Error(data?.message || `Request failed with status ${response.status}`);
+        error.status = response.status;
+        error.data = data;
+        throw error;
+      }
+      return data;
     };
   }
 
