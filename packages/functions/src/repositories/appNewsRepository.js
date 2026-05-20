@@ -1,4 +1,4 @@
-import {api} from '@functions/helpers/api';
+import { api } from '@functions/helpers/api';
 import cleanEmptyField from '@functions/helpers/utils/cleanEmptyField';
 import qs from 'qs';
 
@@ -10,14 +10,14 @@ const BASE_URL = 'https://blog-admin.avada.io/articles';
  */
 export async function getAppNewsList(query) {
   try {
-    const {searchKey, categories} = query;
-    const where = [categories && {categories}, searchKey && {title_contains: searchKey}].filter(
+    const { searchKey, categories } = query;
+    const where = [categories && { categories }, searchKey && { title_contains: searchKey }].filter(
       Boolean
     );
-    return await paginateStrapi({...query, where});
+    return await paginateStrapi({ ...query, where });
   } catch (e) {
     console.error(e);
-    return {data: [], count: 0, hasPre: false, hasNext: true, error: e.message};
+    return { data: [], count: 0, hasPre: false, hasNext: true, error: e.message };
   }
 }
 

@@ -1,4 +1,4 @@
-import {Firestore, FieldValue} from '@google-cloud/firestore';
+import { Firestore, FieldValue } from '@google-cloud/firestore';
 import {
   prepareDoc,
   paginateQuery,
@@ -44,7 +44,7 @@ export async function getSampleById(id, shopId) {
       return null;
     }
 
-    const data = prepareDoc({doc});
+    const data = prepareDoc({ doc });
 
     // Security: Validate document belongs to this shop
     if (data.shopId !== shopId) {
@@ -76,9 +76,9 @@ export async function getSampleById(id, shopId) {
  * @param {string[]} params.pickedFields - Fields to select (empty = all)
  * @returns {Promise<{data: Array, count: number, total?: number, pageInfo: {hasNext: boolean, hasPre: boolean, totalPage?: number}}>}
  */
-export async function getSampleList({shopId, query = {}, pickedFields = []}) {
+export async function getSampleList({ shopId, query = {}, pickedFields = [] }) {
   try {
-    const {order, status, type} = query;
+    const { order, status, type } = query;
 
     // Always start with shopId filter (multi-tenant requirement)
     let queriedRef = collection.where('shopId', '==', shopId);
@@ -92,7 +92,7 @@ export async function getSampleList({shopId, query = {}, pickedFields = []}) {
     }
 
     // Apply sorting (default: updatedAt desc)
-    const {sortField, direction} = getOrderBy(order);
+    const { sortField, direction } = getOrderBy(order);
     queriedRef = queriedRef.orderBy(sortField, direction);
 
     // Use paginateQuery for cursor-based pagination
@@ -107,7 +107,7 @@ export async function getSampleList({shopId, query = {}, pickedFields = []}) {
     return {
       data: [],
       count: 0,
-      pageInfo: {hasNext: false, hasPre: false},
+      pageInfo: { hasNext: false, hasPre: false },
       error: e.message
     };
   }
@@ -127,7 +127,7 @@ export async function getSamplesByIds(shopId, ids) {
   return await getByIds({
     collection,
     ids,
-    filters: {shopId}
+    filters: { shopId }
   });
 }
 
@@ -142,7 +142,7 @@ export async function getAllSamples(shopId) {
   try {
     const docs = await collection.where('shopId', '==', shopId).get();
 
-    return docs.docs.map(doc => prepareDoc({doc}));
+    return docs.docs.map(doc => prepareDoc({ doc }));
   } catch (e) {
     console.error(e);
     return [];
@@ -187,11 +187,11 @@ export async function createSample(shopId, data) {
 
     return {
       success: true,
-      data: {id: docRef.id, ...docData}
+      data: { id: docRef.id, ...docData }
     };
   } catch (e) {
     console.error(e);
-    return {success: false, error: e.message};
+    return { success: false, error: e.message };
   }
 }
 
@@ -217,11 +217,11 @@ export async function createSampleWithId(id, shopId, data) {
 
     return {
       success: true,
-      data: {id, ...docData}
+      data: { id, ...docData }
     };
   } catch (e) {
     console.error(e);
-    return {success: false, error: e.message};
+    return { success: false, error: e.message };
   }
 }
 
@@ -239,7 +239,7 @@ export async function updateSampleById(id, shopId, data) {
     // Validate ownership
     const existing = await getSampleById(id, shopId);
     if (!existing) {
-      return {success: false, error: 'Document not found or access denied'};
+      return { success: false, error: 'Document not found or access denied' };
     }
 
     const updateData = {
@@ -256,11 +256,11 @@ export async function updateSampleById(id, shopId, data) {
 
     return {
       success: true,
-      data: {id, ...existing, ...updateData}
+      data: { id, ...existing, ...updateData }
     };
   } catch (e) {
     console.error(e);
-    return {success: false, error: e.message};
+    return { success: false, error: e.message };
   }
 }
 
@@ -276,7 +276,7 @@ export async function updateSampleWithFieldValue(id, shopId, updates) {
   try {
     const existing = await getSampleById(id, shopId);
     if (!existing) {
-      return {success: false, error: 'Document not found or access denied'};
+      return { success: false, error: 'Document not found or access denied' };
     }
 
     await collection.doc(id).update({
@@ -284,10 +284,10 @@ export async function updateSampleWithFieldValue(id, shopId, updates) {
       updatedAt: FieldValue.serverTimestamp()
     });
 
-    return {success: true};
+    return { success: true };
   } catch (e) {
     console.error(e);
-    return {success: false, error: e.message};
+    return { success: false, error: e.message };
   }
 }
 
@@ -318,15 +318,15 @@ export async function deleteSampleById(id, shopId) {
   try {
     const existing = await getSampleById(id, shopId);
     if (!existing) {
-      return {success: false, error: 'Document not found or access denied'};
+      return { success: false, error: 'Document not found or access denied' };
     }
 
     await collection.doc(id).delete();
 
-    return {success: true};
+    return { success: true };
   } catch (e) {
     console.error(e);
-    return {success: false, error: e.message};
+    return { success: false, error: e.message };
   }
 }
 
@@ -352,12 +352,12 @@ export async function batchCreateSamples(shopId, items) {
       updatedAt: now
     }));
 
-    await batchCreate({firestore, collection, data});
+    await batchCreate({ firestore, collection, data });
 
-    return {success: true, count: items.length};
+    return { success: true, count: items.length };
   } catch (e) {
     console.error(e);
-    return {success: false, count: 0, error: e.message};
+    return { success: false, count: 0, error: e.message };
   }
 }
 
@@ -380,7 +380,7 @@ export async function batchUpdateSamplesByQuery(shopId, filter, updateData) {
 
     const snapshot = await queriedRef.get();
     if (snapshot.empty) {
-      return {success: true, count: 0};
+      return { success: true, count: 0 };
     }
 
     await batchUpdate(firestore, snapshot.docs, {
@@ -388,10 +388,10 @@ export async function batchUpdateSamplesByQuery(shopId, filter, updateData) {
       updatedAt: new Date()
     });
 
-    return {success: true, count: snapshot.size};
+    return { success: true, count: snapshot.size };
   } catch (e) {
     console.error(e);
-    return {success: false, count: 0, error: e.message};
+    return { success: false, count: 0, error: e.message };
   }
 }
 
@@ -412,15 +412,15 @@ export async function batchDeleteSamplesByQuery(shopId, filter) {
 
     const snapshot = await queriedRef.get();
     if (snapshot.empty) {
-      return {success: true, count: 0};
+      return { success: true, count: 0 };
     }
 
     await batchDelete(firestore, snapshot.docs);
 
-    return {success: true, count: snapshot.size};
+    return { success: true, count: snapshot.size };
   } catch (e) {
     console.error(e);
-    return {success: false, count: 0, error: e.message};
+    return { success: false, count: 0, error: e.message };
   }
 }
 

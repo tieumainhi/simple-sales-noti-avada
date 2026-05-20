@@ -1,4 +1,4 @@
-import {formatDateFields} from '@avada/firestore-utils';
+import { formatDateFields } from '@avada/firestore-utils';
 
 /**
  * Get current shop id from Koa context

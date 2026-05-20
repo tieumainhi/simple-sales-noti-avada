@@ -25,7 +25,7 @@ module.exports = {
     'react'
   ],
   'rules': {
-    'prettier/prettier': 'error'
+    'prettier/prettier': ['error', {bracketSpacing: true}]
   },
   'settings': {
     'react': {

@@ -1,5 +1,5 @@
 (function() {
-  const BASE_URL = 'https://merry-boating-introductory-sauce.trycloudflare.com/scripttag';
+  const BASE_URL = 'https://priest-politics-activity-limit.trycloudflare.com/scripttag';
 
   const scriptElement = document.createElement('script');
   scriptElement.type = 'text/javascript';

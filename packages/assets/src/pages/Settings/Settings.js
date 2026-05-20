@@ -1,5 +1,5 @@
 import React from 'react';
-import {Card, Layout, Page} from '@shopify/polaris';
+import { Card, Layout, Page } from '@shopify/polaris';
 
 /**
  * @return {JSX.Element}

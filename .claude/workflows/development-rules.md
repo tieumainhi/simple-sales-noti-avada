@@ -1,6 +1,7 @@
 # Avada Development Rules
 
 ## Principles
+
 **YAGNI** - You Aren't Gonna Need It
 **KISS** - Keep It Simple, Stupid
 **DRY** - Don't Repeat Yourself
@@ -8,6 +9,7 @@
 ## Code Standards
 
 ### Naming Conventions
+
 - `camelCase` - variables, functions, properties
 - `PascalCase` - classes, React components
 - `UPPER_SNAKE_CASE` - constants
@@ -15,6 +17,7 @@
 - Booleans prefix with `is/has`: `isActive`, `hasPermission`
 
 ### Code Patterns
+
 - Prefer `const` over `let`; avoid mutation
 - Use `===` instead of `==`
 - Prefer async/await over promises
@@ -25,13 +28,18 @@
 - **Data-driven conditionals**: Replace `switch`/`if-else` chains with object map lookups (see below)
 
 ### Data-Driven Conditionals (Maps vs Switch/Else-If)
+
 When you have 3+ conditions routing to different behavior, use an object map instead of switch or if-else chains:
 
 ```javascript
 // BAD: if-else chain
-if (type === 'customer') { handleCustomer(); }
-else if (type === 'order') { handleOrder(); }
-else if (type === 'product') { handleProduct(); }
+if (type === 'customer') {
+  handleCustomer();
+} else if (type === 'order') {
+  handleOrder();
+} else if (type === 'product') {
+  handleProduct();
+}
 
 // GOOD: Handler map
 const HANDLERS = {
@@ -44,6 +52,7 @@ if (handler) handler();
 ```
 
 **When to use maps:**
+
 - 3+ branches mapping type/action → behavior
 - Switch/case with same structure per case
 - Suggestion/config generation per entity type
@@ -70,7 +79,9 @@ Request → [Schema Middleware] → Controller → [Service Validation] → Repo
 - Reference: `.claude/skills/api-design/references/validation.md`
 
 ### Service Layer Extraction
+
 Move business logic from controllers/handlers to services when:
+
 - Controller has validation logic beyond basic input presence checks
 - Controller queries repositories directly with business conditions
 - Controller builds/transforms data beyond simple pass-through
@@ -95,6 +106,7 @@ export async function createSkill(ctx) {
 ```
 
 ### GraphQL Query Organization
+
 - Store GraphQL queries as **named constants** at module top level
 - Name pattern: `RESOURCE_ACTION_QUERY` (e.g., `PRODUCT_SEARCH_QUERY`, `ORDER_LIST_QUERY`)
 - Use **mapper functions** to transform GraphQL responses to domain objects
@@ -117,6 +129,7 @@ export async function searchProducts(shopData, q, limit) {
 ```
 
 ### Backend Structure (Node.js/Firebase)
+
 ```
 packages/functions/src/
 ├── handlers/      # Controllers - orchestrate ONLY, no business logic
@@ -129,6 +142,7 @@ packages/functions/src/
 ```
 
 ### Constants Organization
+
 - Group constants by feature in `const/{feature}/` directory
 - **Split by bundle target**: scripttag-safe (lightweight) vs backend-only (heavier)
 - Use barrel file `index.js` for convenient imports
@@ -144,6 +158,7 @@ packages/functions/src/
 - **Backend/Admin imports**: Use barrel `@functions/const/feature`
 
 ### Frontend Structure (React)
+
 - One component per file (PascalCase filename)
 - Functional components only
 - BEM naming for CSS classes
@@ -151,6 +166,7 @@ packages/functions/src/
 - Custom hooks for reusable logic
 
 ## Firestore Rules
+
 - Repository handles ONE collection only
 - Define collection name as `const COLLECTION_NAME = '...'` inline in repository
 - All query/mutation functions require `shopId` as first parameter (multi-tenant)
@@ -161,6 +177,7 @@ packages/functions/src/
 - **INDEXES**: Create `firestore-indexes/{collection}.json` for compound queries, run `yarn firestore:build`
 
 ## Shopify/Polaris Rules
+
 - Use GraphQL Admin API (preferred over REST)
 - Button `url` prop for navigation (NOT `onClick` + `window.open`)
 - Use Polaris components when available
@@ -168,13 +185,20 @@ packages/functions/src/
 - Handle rate limits with exponential backoff
 
 ## Development Environment
+
 - `yarn dev` auto-syncs cloudflare tunnel URL to all packages:
   - `packages/functions/.env` (APP_BASE_URL)
   - `packages/scripttag/.env.development` (API_URL)
   - `extensions/theme-extension/assets/` (BASE_URL)
-- No manual env updates needed during development
+- Production uses `APP_BASE_URL` as the fixed backend app host.
+- Local development treats `APP_BASE_URL` as a fallback only.
+- Embedded Shopify handlers must resolve the app host with `getAppHostName(ctx, appConfig)` instead of passing `hostName: appConfig.baseUrl` directly.
+- The helper should ignore Shopify frame hosts (`admin.shopify.com`, `*.myshopify.com`) and prefer the active Cloudflare/app host from request headers.
+- No manual env updates needed when Shopify CLI rotates the Cloudflare tunnel URL.
+- Firebase Hosting emulator owns backend port `5000`; so add `port=5000` to root `shopify.web.toml`, Shopify CLI will fail if emulators started first. always run `yarn dev` before `yarn emulator` for development.
 
 ## Security
+
 - NEVER commit credentials or API keys
 - Validate `.gitignore` includes secrets
 - Sanitize all user inputs
@@ -182,6 +206,7 @@ packages/functions/src/
 - Verify authentication on all endpoints
 
 ## Pre-commit
+
 - Run `npm run lint` before commit
 - Run `npm test` before push
 - NEVER ignore failing tests
@@ -189,6 +214,7 @@ packages/functions/src/
 - Keep commits focused and atomic
 
 ## File Size
+
 - Keep files under 200 lines when possible
 - Split large files into focused modules
 - Extract utilities into separate files
@@ -196,18 +222,21 @@ packages/functions/src/
 ## AI/LangChain Rules
 
 ### Multi-Agent Architecture
+
 - **NEVER** combine 50+ tools into a single agent - LLM won't call tools reliably
 - Split into specialist agents with **5-15 tools each** by domain
 - Use supervisor pattern to route to specialists
 - Reference: `.claude/skills/langchain/references/multi-agent-architecture.md`
 
 ### Agent Configuration
+
 - Use `temperature: 0` for specialist agents (reliable tool calling)
 - Use `temperature: 0.3` for supervisor (routing decisions)
 - Agent prompts MUST list tools explicitly with examples
 - Include "CALL the tool, don't describe the action" instruction
 
 ### Tool Design
+
 - Tool descriptions must be clear with example inputs
 - HITL tools return `{pending: true, actionType, actionId}` for confirmation
 - Use `interrupt()` inside tools for human-in-the-loop confirmation

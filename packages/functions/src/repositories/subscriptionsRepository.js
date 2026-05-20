@@ -1,5 +1,5 @@
-import {Firestore} from '@google-cloud/firestore';
-import {getOrderBy, paginateQuery} from '@functions/repositories/helper';
+import { Firestore } from '@google-cloud/firestore';
+import { getOrderBy, paginateQuery } from '@functions/repositories/helper';
 
 const firestore = new Firestore();
 /** @type {CollectionReference} */
@@ -11,11 +11,11 @@ const collection = firestore.collection('subscriptions');
  * @returns {Promise<{data: *[], total?: number, pageInfo: {hasNext: boolean, hasPre: boolean, totalPage?: number}}>}
  */
 export async function getSubscriptions(shopId, query = {}) {
-  const {sortField, direction} = getOrderBy(query.sort);
+  const { sortField, direction } = getOrderBy(query.sort);
 
   const queriedRef = collection.where('shopId', '==', shopId).orderBy(sortField, direction);
 
-  return paginateQuery({queriedRef, collection, query});
+  return paginateQuery({ queriedRef, collection, query });
 }
 
 /**

@@ -1,5 +1,5 @@
-import {Firestore} from '@google-cloud/firestore';
-import {presentDataAndFormatDate} from '@avada/firestore-utils';
+import { Firestore } from '@google-cloud/firestore';
+import { presentDataAndFormatDate } from '@avada/firestore-utils';
 
 const firestore = new Firestore();
 /** @type CollectionReference */

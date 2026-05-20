@@ -1,6 +1,6 @@
-import {chunk, flatten} from '@avada/utils';
-import {formatDateFields} from '@avada/firestore-utils';
-import {FieldPath} from '@google-cloud/firestore/build/src';
+import { chunk, flatten } from '@avada/utils';
+import { formatDateFields } from '@avada/firestore-utils';
+import { FieldPath } from '@google-cloud/firestore/build/src';
 
 /**
  * @fileoverview Firestore repository helper functions.
@@ -77,9 +77,9 @@ const BATCH_SIZE = 500;
  * const data = prepareDoc({doc});
  * // Returns: {id: 'abc123', name: '...', createdAt: Date, ...}
  */
-export function prepareDoc({doc, data = {}, keyId = 'id'}) {
+export function prepareDoc({ doc, data = {}, keyId = 'id' }) {
   if (doc) {
-    data = typeof doc.data() === 'undefined' ? {} : {...doc.data(), [keyId]: doc.id};
+    data = typeof doc.data() === 'undefined' ? {} : { ...doc.data(), [keyId]: doc.id };
   }
   return formatDateFields(data);
 }
@@ -160,7 +160,7 @@ export async function paginateQuery({
 
   const docs = await queriedRef.get();
 
-  const data = docs.docs.map(doc => prepareDoc({doc}));
+  const data = docs.docs.map(doc => prepareDoc({ doc }));
 
   if (!getAll && (!hasPre || !hasNext)) {
     const [resultHasPre, resultHasNext] = await Promise.all([
@@ -175,8 +175,8 @@ export async function paginateQuery({
     }
   }
 
-  const resp = {data, count: docs.size, total, pageInfo: {hasPre, hasNext, totalPage}};
-  return query.withDocs ? {...resp, docs} : resp;
+  const resp = { data, count: docs.size, total, pageInfo: { hasPre, hasNext, totalPage } };
+  return query.withDocs ? { ...resp, docs } : resp;
 }
 
 /**
@@ -239,7 +239,7 @@ export async function verifyHasNext(objectDocs, queriedRef) {
  */
 export function getOrderBy(sortType) {
   const [sortField, direction] = sortType ? sortType.split('_') : ['updatedAt', 'desc'];
-  return {sortField, direction};
+  return { sortField, direction };
 }
 
 /**
@@ -267,14 +267,14 @@ export function getOrderBy(sortType) {
  * })
  * @private
  */
-function prepareQueryRef({collection, filters = {}, cleanEmptyFilter = true}) {
+function prepareQueryRef({ collection, filters = {}, cleanEmptyFilter = true }) {
   return Object.keys(filters).reduce((query, field) => {
     const val = filters[field];
     if (cleanEmptyFilter && !val) {
       return query;
     }
     if (isObject(val) && ['operator', 'value'].every(key => val.hasOwnProperty(key))) {
-      const {operator, value} = val;
+      const { operator, value } = val;
       return query.where(field, operator, value);
     }
     return query.where(field, '==', val);
@@ -322,7 +322,7 @@ export async function getByIds({
   try {
     const idWhere = idField === 'id' ? FieldPath.documentId() : idField;
     const queriedRef = idBatch => {
-      const query = prepareQueryRef({collection, filters}).where(idWhere, 'in', idBatch);
+      const query = prepareQueryRef({ collection, filters }).where(idWhere, 'in', idBatch);
       return selectFields.length ? query.select(...selectFields) : query;
     };
 
@@ -330,7 +330,7 @@ export async function getByIds({
     const rawDocs = await Promise.all(batches.map(batch => queriedRef(batch).get()));
     const allDocs = flatten(rawDocs.map(docs => docs.docs));
 
-    return selectDoc ? allDocs : allDocs.map(doc => prepareDoc({doc}));
+    return selectDoc ? allDocs : allDocs.map(doc => prepareDoc({ doc }));
   } catch (e) {
     console.error(e);
     return [];
@@ -370,7 +370,7 @@ function isObject(obj) {
  *   data: items.map(item => ({...item, shopId, createdAt: new Date()}))
  * });
  */
-export async function batchCreate({firestore, collection, data, callbackFunc = async () => {}}) {
+export async function batchCreate({ firestore, collection, data, callbackFunc = async () => {} }) {
   const batches = [];
   const dataChunks = chunk(data, BATCH_SIZE);
   dataChunks.forEach(dataChunk => {
@@ -378,9 +378,9 @@ export async function batchCreate({firestore, collection, data, callbackFunc = a
     dataChunk.forEach(dataItem => {
       batch.create(collection.doc(), dataItem);
     });
-    batches.push({batch, size: dataChunk.length});
+    batches.push({ batch, size: dataChunk.length });
   });
-  for (const {batch} of batches) {
+  for (const { batch } of batches) {
     await batch.commit();
     await callbackFunc();
   }
@@ -446,13 +446,13 @@ export async function batchUpdateSeparateData({
   docChunks.forEach(docChunk => {
     const batch = firestore.batch();
     docChunk.forEach(dataItem => {
-      const {id, ...updateData} = dataItem;
+      const { id, ...updateData } = dataItem;
       if (!id) return;
       batch.update(collection.doc(id), updateData);
     });
-    batches.push({batch, size: docChunk.length});
+    batches.push({ batch, size: docChunk.length });
   });
-  for (const {batch} of batches) {
+  for (const { batch } of batches) {
     await batch.commit();
     await callbackFunc();
   }
@@ -521,10 +521,10 @@ export async function getDocsInChunks({
 
   const snapshot = await query.get();
   const docs = snapshot.docs;
-  data.push(...docs.map(doc => ({...formatDateFields(doc.data()), id: doc.id})));
+  data.push(...docs.map(doc => ({ ...formatDateFields(doc.data()), id: doc.id })));
 
   if (docs.length < perPage) return data;
 
   lastDoc = docs[docs.length - 1];
-  return await getDocsInChunks({collection, shopId, lastDoc, data});
+  return await getDocsInChunks({ collection, shopId, lastDoc, data });
 }

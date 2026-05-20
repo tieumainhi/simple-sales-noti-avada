@@ -1,4 +1,4 @@
-import {getCurrentShopData} from '@functions/helpers/auth';
+import { getCurrentShopData } from '@functions/helpers/auth';
 
 /**
  * @param {*} err

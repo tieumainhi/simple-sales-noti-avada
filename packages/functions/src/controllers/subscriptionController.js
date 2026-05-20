@@ -1,5 +1,5 @@
-import {getCurrentShop} from '@functions/helpers/auth';
-import {getShopById} from '@functions/repositories/shopRepository';
+import { getCurrentShop } from '@functions/helpers/auth';
+import { getShopById } from '@functions/repositories/shopRepository';
 import {
   addSubscription,
   deleteSubscription,
@@ -15,7 +15,7 @@ import {
  */
 export async function getSubscription(ctx) {
   const shop = await getShopById(getCurrentShop(ctx));
-  ctx.body = {shop};
+  ctx.body = { shop };
 }
 
 /**
@@ -29,7 +29,7 @@ export async function getList(ctx) {
     return (ctx.body = await getSubscriptions(shopId, query));
   } catch (e) {
     console.error(e);
-    return (ctx.body = {data: [], error: e.message});
+    return (ctx.body = { data: [], error: e.message });
   }
 }
 
@@ -42,10 +42,10 @@ export async function createOne(ctx) {
     const data = ctx.req.body;
     const shopId = getCurrentShop(ctx);
     await addSubscription(shopId, data);
-    return (ctx.body = {success: true});
+    return (ctx.body = { success: true });
   } catch (e) {
     console.error(e);
-    return (ctx.body = {error: e.message});
+    return (ctx.body = { error: e.message });
   }
 }
 
@@ -55,12 +55,12 @@ export async function createOne(ctx) {
  */
 export async function updateOne(ctx) {
   try {
-    const {id, ...data} = ctx.req.body;
+    const { id, ...data } = ctx.req.body;
     await updateSubscription(id, data);
-    return (ctx.body = {success: true});
+    return (ctx.body = { success: true });
   } catch (e) {
     console.error(e);
-    return (ctx.body = {error: e.message});
+    return (ctx.body = { error: e.message });
   }
 }
 
@@ -70,11 +70,11 @@ export async function updateOne(ctx) {
  */
 export async function deleteOne(ctx) {
   try {
-    const {id} = ctx.params;
+    const { id } = ctx.params;
     await deleteSubscription(id);
-    return (ctx.body = {success: true});
+    return (ctx.body = { success: true });
   } catch (e) {
     console.error(e);
-    return (ctx.body = {error: e.message});
+    return (ctx.body = { error: e.message });
   }
 }

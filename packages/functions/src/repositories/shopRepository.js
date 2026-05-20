@@ -1,5 +1,5 @@
-import {Firestore} from '@google-cloud/firestore';
-import {formatDateFields} from '@avada/firestore-utils';
+import { Firestore } from '@google-cloud/firestore';
+import { formatDateFields } from '@avada/firestore-utils';
 
 const firestore = new Firestore();
 /** @type CollectionReference */
@@ -12,7 +12,7 @@ const collection = firestore.collection('shops');
  */
 export async function getShopById(id) {
   const doc = await collection.doc(id).get();
-  return {id: doc.id, ...formatDateFields(doc.data())};
+  return { id: doc.id, ...formatDateFields(doc.data()) };
 }
 
 /**
@@ -49,5 +49,5 @@ export async function getShopByField(value, field = 'shopifyDomain') {
   }
 
   const doc = docs.docs[0];
-  return {id: doc.id, ...formatDateFields(doc.data())};
+  return { id: doc.id, ...formatDateFields(doc.data()) };
 }

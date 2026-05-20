@@ -1,6 +1,6 @@
-import {getCurrentShop} from '../helpers/auth';
-import {getShopInfoByShopId} from '@functions/repositories/shopInfoRepository';
-import {getShopById} from '@functions/repositories/shopRepository';
+import { getCurrentShop } from '../helpers/auth';
+import { getShopInfoByShopId } from '@functions/repositories/shopInfoRepository';
+import { getShopById } from '@functions/repositories/shopRepository';
 
 /**
  * @param ctx
@@ -14,9 +14,9 @@ export async function getUserShops(ctx) {
 
     console.log('Got shop info', shopInfo);
 
-    ctx.body = {shop, shopInfo};
+    ctx.body = { shop, shopInfo };
   } catch (e) {
     console.error(e);
-    ctx.body = {shop: null, shopInfo: null};
+    ctx.body = { shop: null, shopInfo: null };
   }
 }

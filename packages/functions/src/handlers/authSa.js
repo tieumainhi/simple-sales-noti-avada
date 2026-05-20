@@ -1,6 +1,6 @@
 import App from 'koa';
 import 'isomorphic-fetch';
-import {shopifyAuth} from '@avada/core';
+import { shopifyAuth } from '@avada/core';
 import shopifyConfig from '@functions/config/shopify';
 import render from 'koa-ejs';
 import path from 'path';
@@ -8,6 +8,7 @@ import createErrorHandler from '@functions/middleware/errorHandler';
 import firebase from 'firebase-admin';
 import appConfig from '@functions/config/app';
 import shopifyOptionalScopes from '@functions/config/shopifyOptionalScopes';
+import { getAppHostName } from '@functions/helpers/requestUrl';
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp();
@@ -26,34 +27,36 @@ render(app, {
 });
 app.use(createErrorHandler());
 
+const authOptions = {
+  apiKey: shopifyConfig.apiKey,
+  accessTokenKey: shopifyConfig.accessTokenKey,
+  firebaseApiKey: shopifyConfig.firebaseApiKey,
+  scopes: shopifyConfig.scopes,
+  secret: shopifyConfig.secret,
+  successRedirect: '/',
+  initialPlan: {
+    id: 'free',
+    name: 'Free',
+    price: 0,
+    trialDays: 0,
+    features: {}
+  },
+  isEmbeddedApp: false,
+  prefix: '/authSa',
+  afterThemePublish: ctx => {
+    // Publish assets when theme is published or changed here
+    return (ctx.body = {
+      success: true
+    });
+  },
+  optionalScopes: shopifyOptionalScopes
+};
+
 // Register all routes for the application
-app.use(
-  shopifyAuth({
-    apiKey: shopifyConfig.apiKey,
-    accessTokenKey: shopifyConfig.accessTokenKey,
-    firebaseApiKey: shopifyConfig.firebaseApiKey,
-    scopes: shopifyConfig.scopes,
-    secret: shopifyConfig.secret,
-    successRedirect: '/',
-    initialPlan: {
-      id: 'free',
-      name: 'Free',
-      price: 0,
-      trialDays: 0,
-      features: {}
-    },
-    hostName: appConfig.baseUrl,
-    isEmbeddedApp: false,
-    prefix: '/authSa',
-    afterThemePublish: ctx => {
-      // Publish assets when theme is published or changed here
-      return (ctx.body = {
-        success: true
-      });
-    },
-    optionalScopes: shopifyOptionalScopes
-  }).routes()
-);
+app.use(async (ctx, next) => {
+  const hostName = getAppHostName(ctx, appConfig);
+  return shopifyAuth({ ...authOptions, hostName }).routes()(ctx, next);
+});
 
 // Handling all errors
 app.on('error', err => {

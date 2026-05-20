@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Layout, Page} from '@shopify/polaris';
+import { Button, Layout, Page } from '@shopify/polaris';
 
 const OptionalScopes = () => {
   const handleGrantExtraScopes = () => {

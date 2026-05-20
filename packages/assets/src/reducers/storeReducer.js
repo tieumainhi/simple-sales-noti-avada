@@ -1,7 +1,7 @@
-import React, {createContext, useContext, useEffect, useReducer} from 'react';
+import React, { createContext, useContext, useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
-import {getSubscription, reducer} from '@assets/actions/storeActions';
-import {isShopUpgradable} from '@assets/services/shopService';
+import { getSubscription, reducer } from '@assets/actions/storeActions';
+import { isShopUpgradable } from '@assets/services/shopService';
 
 /** @type {React.Context<IStoreReducer>} */
 const StoreReducer = createContext({});
@@ -15,10 +15,10 @@ export const useStore = () => useContext(StoreReducer);
  * @return {JSX.Element}
  * @constructor
  */
-export const StoreProvider = ({children, user, activeShop: shop}) => {
-  const initState = {user, shop};
+export const StoreProvider = ({ children, user, activeShop: shop }) => {
+  const initState = { user, shop };
   const [state, dispatch] = useReducer(reducer, initState);
-  const handleDispatch = (type, payload = undefined) => dispatch({type, payload});
+  const handleDispatch = (type, payload = undefined) => dispatch({ type, payload });
 
   window.activeShop = shop; // for debugging only
 
@@ -29,7 +29,7 @@ export const StoreProvider = ({children, user, activeShop: shop}) => {
   }, []);
 
   return (
-    <StoreReducer.Provider value={{state, dispatch: handleDispatch}}>
+    <StoreReducer.Provider value={{ state, dispatch: handleDispatch }}>
       {children}
     </StoreReducer.Provider>
   );

@@ -1,10 +1,10 @@
 import App from './App';
 import React from 'react';
 import './styles/app.scss';
-import {api} from './helpers';
-import {StoreProvider} from '@assets/reducers/storeReducer';
-import {collectActiveShopData} from '@assets/services/shopService';
-import {createRoot} from 'react-dom/client';
+import { api } from './helpers';
+import { StoreProvider } from '@assets/reducers/storeReducer';
+import { collectActiveShopData } from '@assets/services/shopService';
+import { createRoot } from 'react-dom/client';
 import '@shopify/polaris/build/esm/styles.css';
 
 const hidePreloader = () => {
@@ -37,14 +37,14 @@ const renderBootstrapError = error => {
 (async () => {
   try {
     const shopResponse = await api('/shops');
-    const {shop, shopInfo} = shopResponse || {};
+    const { shop, shopInfo } = shopResponse || {};
     if (!shop || !shopInfo) {
       throw new Error('Shop data is missing from /shops response');
     }
 
     const [activeShop, user] = [
-      collectActiveShopData({shop, shopInfo}),
-      {email: shop.email, displayName: shopInfo.shopOwner}
+      collectActiveShopData({ shop, shopInfo }),
+      { email: shop.email, displayName: shopInfo.shopOwner }
     ];
     // if (activeShop) {
     //   loadCrisp('WEBSITE_ID', shop.crispSessionToken);
@@ -56,7 +56,7 @@ const renderBootstrapError = error => {
     const container = document.getElementById('app');
     const root = createRoot(container);
     root.render(
-      <StoreProvider {...{user, activeShop}}>
+      <StoreProvider {...{ user, activeShop }}>
         <App />
       </StoreProvider>
     );

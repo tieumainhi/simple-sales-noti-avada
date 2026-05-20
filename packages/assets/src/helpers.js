@@ -1,9 +1,9 @@
 import axios from 'axios';
 import createApp from '@shopify/app-bridge';
-import {Redirect} from '@shopify/app-bridge/actions';
-import {initializeApp} from 'firebase/app';
-import {getAuth} from 'firebase/auth';
-import {getApiPrefix} from '@functions/const/app';
+import { Redirect } from '@shopify/app-bridge/actions';
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getApiPrefix } from '@functions/const/app';
 import isEmbeddedAppEnv from '@assets/helpers/isEmbeddedAppEnv';
 
 /**
@@ -40,7 +40,7 @@ export const embedApp = createEmbedApp();
  * Used for standalone mode API requests with Firebase auth.
  * @type {import('axios').AxiosInstance}
  */
-export const client = axios.create({timeout: 60000});
+export const client = axios.create({ timeout: 60000 });
 
 /**
  * Universal API client that works in both embedded and standalone modes.

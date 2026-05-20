@@ -1,14 +1,14 @@
 import React from 'react';
-import {Navigation} from '@shopify/polaris';
-import {useHistory, useLocation} from 'react-router-dom';
-import {ArrowLeftIcon, HomeIcon} from '@shopify/polaris-icons';
+import { Navigation } from '@shopify/polaris';
+import { useHistory, useLocation } from 'react-router-dom';
+import { ArrowLeftIcon, HomeIcon } from '@shopify/polaris-icons';
 import '@assets/styles/layout/navigation.scss';
-import {useStore} from '@assets/reducers/storeReducer';
-import {isEmbeddedApp, prependRoute} from '@assets/config/app';
+import { useStore } from '@assets/reducers/storeReducer';
+import { isEmbeddedApp, prependRoute } from '@assets/config/app';
 import getDomain from '@assets/helpers/getDomain';
-import {getUrl} from '@assets/helpers/getUrl';
-import {navigationLinks} from '@assets/const/navigation';
-import {getMenuIcon} from '@assets/const/menuIcons';
+import { getUrl } from '@assets/helpers/getUrl';
+import { navigationLinks } from '@assets/const/navigation';
+import { getMenuIcon } from '@assets/const/menuIcons';
 
 /**
  * @return {JSX.Element}
@@ -16,9 +16,9 @@ import {getMenuIcon} from '@assets/const/menuIcons';
  */
 export default function AppNavigation() {
   const history = useHistory();
-  const {pathname} = useLocation();
-  const {state} = useStore();
-  const {shop} = state;
+  const { pathname } = useLocation();
+  const { state } = useStore();
+  const { shop } = state;
 
   const isSelected = (route, isExact = true) => {
     if (typeof route === 'undefined') return false;
@@ -29,7 +29,7 @@ export default function AppNavigation() {
   const prepareMenu = (menu, item) => {
     if (!item) return menu;
 
-    const {subNavigationItems: subMenus, url, path, includeUrl} = item;
+    const { subNavigationItems: subMenus, url, path, includeUrl } = item;
 
     if (!subMenus?.length) {
       menu.push({
@@ -72,7 +72,7 @@ export default function AppNavigation() {
           {
             url: '/',
             icon: HomeIcon,
-            label: 'Dashboard',
+            label: 'Home',
             selected: location.pathname === getUrl('/'),
             onClick: () => history.push('/')
           },

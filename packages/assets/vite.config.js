@@ -1,17 +1,17 @@
-import {defineConfig, transformWithEsbuild} from 'vite';
+import { defineConfig, transformWithEsbuild } from 'vite';
 import react from '@vitejs/plugin-react';
 import * as path from 'path';
 import fs from 'fs';
 import os from 'os';
 import EnvironmentPlugin from 'vite-plugin-environment';
-import {nodePolyfills} from 'vite-plugin-node-polyfills';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 const APP_PORT = 0;
 
 const localhost = '127.0.0.1';
 const isProduction = process.env.NODE_ENV === 'production';
 const environmentPath = !process.env.ENVIRONMENT ? '.env' : `.env.${process.env.ENVIRONMENT}`;
-require('dotenv').config({path: path.resolve(__dirname, environmentPath)}); // read file .env.development
+require('dotenv').config({ path: path.resolve(__dirname, environmentPath) }); // read file .env.development
 const host = process.env.HOST ? process.env.HOST.replace(/https?:\/\//, '') : localhost;
 const isEmbed = process.env.IS_EMBEDDED_APP === 'yes';
 const templateOutFile = isEmbed ? 'embed-template.html' : 'standalone.html';
@@ -52,7 +52,8 @@ if (!isProduction && shopifyApiKey) {
   try {
     const baseUrl = process.env.HOST.replace('https://', '');
 
-    // Update functions .env file
+    // Update functions .env file 
+    // Note: if yarn emulators is running, it will watch the file changes and restart the server, so we need to update the .env file before starting the server
     updateEnvFile('../functions/.env', {
       APP_BASE_URL: baseUrl,
       SHOPIFY_API_KEY: shopifyApiKey,
@@ -162,7 +163,7 @@ export default defineConfig({
             const hasEmbedParam = req.url.includes('embedded=') || req.url.includes('shop=');
             if (hasEmbedParam) {
               const newUrl = '/embed' + (req.url === '/' ? '' : req.url.slice(1));
-              res.writeHead(302, {Location: newUrl});
+              res.writeHead(302, { Location: newUrl });
               res.end();
               return;
             }
@@ -212,7 +213,7 @@ export default defineConfig({
           );
       }
     },
-    react({jsxRuntime: 'classic'})
+    react({ jsxRuntime: 'classic' })
   ],
   optimizeDeps: {
     entries: ['./src/**/*.{js,jsx,ts,tsx}'],

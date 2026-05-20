@@ -11,12 +11,12 @@ export default function createErrorHandler() {
       if (ctx.get('accept') === 'application/json') {
         ctx.status = err.status || 500;
         if (err.errors) {
-          ctx.body = {errors: err.errors};
+          ctx.body = { errors: err.errors };
         } else {
-          ctx.body = {error: err.message};
+          ctx.body = { error: err.message };
         }
       } else {
-        await ctx.render('error', {error: err.message});
+        await ctx.render('error', { error: err.message });
       }
       ctx.app.emit('error', err, ctx);
     }

@@ -14,7 +14,7 @@
 export default async function subscribeBackgroundHandling(event) {
   try {
     const data = event.data.message.json;
-    const {type, shopId} = data;
+    const { type, shopId } = data;
 
     switch (type) {
       case 'afterInstall':

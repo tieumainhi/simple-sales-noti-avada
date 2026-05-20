@@ -1,5 +1,5 @@
 const esbuild = require('esbuild');
-const {glob} = require('glob');
+const { glob } = require('glob');
 const fs = require('fs-extra');
 const path = require('path');
 
@@ -152,7 +152,7 @@ async function build() {
           name: 'alias-resolver',
           setup(build) {
             // Resolve @functions alias to ./src
-            build.onResolve({filter: /^@functions\//}, args => {
+            build.onResolve({ filter: /^@functions\// }, args => {
               const importPath = args.path.replace('@functions/', '');
               return {
                 path: path.resolve(srcDir, importPath + (importPath.endsWith('.js') ? '' : '.js')),

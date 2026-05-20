@@ -4,7 +4,7 @@ import * as errorService from '@functions/services/errorService';
 import apiRouter from '@functions/routes/api';
 import render from 'koa-ejs';
 import path from 'path';
-import {verifyRequest} from '@avada/core';
+import { verifyRequest } from '@avada/core';
 
 // Initialize all demand configuration for an application
 const api = new App();

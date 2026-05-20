@@ -33,7 +33,7 @@ export function validate(schema) {
 
     if (!result.success) {
       ctx.status = 400;
-      ctx.body = {success: false, error: formatZodError(result.error)};
+      ctx.body = { success: false, error: formatZodError(result.error) };
       return;
     }
 

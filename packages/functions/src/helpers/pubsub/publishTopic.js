@@ -1,4 +1,4 @@
-import {PubSub} from '@google-cloud/pubsub';
+import { PubSub } from '@google-cloud/pubsub';
 
 // Reuse PubSub client across calls to avoid connection overhead
 const pubSub = new PubSub();
@@ -8,7 +8,7 @@ const topicCache = new Map();
 
 const getTopic = name => {
   if (!topicCache.has(name)) {
-    topicCache.set(name, pubSub.topic(name, {gaxOpts: {timeout: 540000}}));
+    topicCache.set(name, pubSub.topic(name, { gaxOpts: { timeout: 540000 } }));
   }
   return topicCache.get(name);
 };

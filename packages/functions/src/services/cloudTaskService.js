@@ -1,7 +1,7 @@
-import {getFunctions} from 'firebase-admin/functions';
+import { getFunctions } from 'firebase-admin/functions';
 import appConfig from '../config/app';
 import fetch from 'node-fetch';
-import {delay} from '@avada/utils/lib/delay';
+import { delay } from '@avada/utils/lib/delay';
 
 export const ENQUEUE_SUBSCRIBER_FUNC_NAME = 'enqueueSubscriber';
 
@@ -45,9 +45,9 @@ export async function enqueueTask({
     return fetch(
       `http://localhost:5011/${process.env.GCLOUD_PROJECT}/us-central1/${functionName}`,
       {
-        headers: {Accept: 'application/json', 'Content-Type': 'application/json'},
+        headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
         method: 'POST',
-        body: JSON.stringify({data})
+        body: JSON.stringify({ data })
       }
     );
   }

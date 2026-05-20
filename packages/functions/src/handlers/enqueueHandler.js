@@ -20,7 +20,7 @@
  */
 export default async function enqueueHandler(request) {
   try {
-    const {type, shopId} = request.data;
+    const { type, shopId } = request.data;
 
     switch (type) {
       case 'processOrder':
