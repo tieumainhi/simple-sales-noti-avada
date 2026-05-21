@@ -20,7 +20,7 @@ export function formatBothDateTime(datetime = new Date(), timeZone = '') {
 export function formatDateOnly(datetime = new Date(), timeZone = '') {
   let result = new Date(datetime);
   if (timeZone !== '') {
-    result = new Date(result.toLocaleString('en-US', {timeZone}));
+    result = new Date(result.toLocaleString('en-US', { timeZone }));
   }
   return fullMonthList[result.getMonth()] + ' ' + result.getDate() + ', ' + result.getFullYear();
 }
@@ -28,7 +28,7 @@ export function formatDateOnly(datetime = new Date(), timeZone = '') {
 export function formatDateRaw(datetime = new Date(), timeZone = '') {
   let result = new Date(datetime);
   if (timeZone !== '') {
-    result = new Date(result.toLocaleString('en-US', {timeZone}));
+    result = new Date(result.toLocaleString('en-US', { timeZone }));
   }
   return [
     result.getFullYear(),
@@ -40,7 +40,7 @@ export function formatDateRaw(datetime = new Date(), timeZone = '') {
 export function formatTimeOnly(datetime = new Date(), timeZone = '') {
   let result = new Date(datetime);
   if (timeZone !== '') {
-    result = new Date(result.toLocaleString('en-US', {timeZone}));
+    result = new Date(result.toLocaleString('en-US', { timeZone }));
   }
   return [zeroSuffix(result.getHours()), zeroSuffix(result.getMinutes())].join(':');
 }

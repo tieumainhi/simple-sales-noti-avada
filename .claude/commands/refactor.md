@@ -3,15 +3,18 @@
 Refactor the specified file or code pattern following Avada Development standards.
 
 ## Arguments
+
 - `$ARGUMENTS` - File path, function name, or refactoring scope (e.g., "magic strings in services", "src/services/userService.js", "consolidate duplicate code in handlers")
 
 ## Reference Skills
+
 - `.claude/skills/avada-architecture.md`
 - `.claude/skills/backend.md`
 
 ## Refactoring Checklist
 
 ### Code Quality
+
 - [ ] Extract magic strings/numbers to named constants
 - [ ] Replace hardcoded values with configuration or environment variables
 - [ ] Apply early return pattern (eliminate else/else-if chains)
@@ -22,12 +25,14 @@ Refactor the specified file or code pattern following Avada Development standard
 - [ ] Apply proper naming conventions (camelCase, PascalCase, UPPER_SNAKE_CASE)
 
 ### DRY (Don't Repeat Yourself)
+
 - [ ] Identify and consolidate duplicate code into reusable functions
 - [ ] Extract common patterns into helper utilities
 - [ ] Create shared constants for repeated values
 - [ ] Consider creating base classes or mixins for shared behavior
 
 ### Architecture Patterns
+
 - [ ] Ensure handlers only orchestrate (no business logic)
 - [ ] Move business logic to services (uniqueness checks, cross-entity rules)
 - [ ] Extract schema validation to Zod middleware (`middleware/{feature}Validation.js`)
@@ -39,12 +44,14 @@ Refactor the specified file or code pattern following Avada Development standard
 - [ ] Separate concerns appropriately
 
 ### Performance Considerations
+
 - [ ] Use `Promise.all` for independent async operations
 - [ ] Avoid N+1 query patterns
 - [ ] Consider caching for repeated operations
 - [ ] Use early exits to avoid unnecessary processing
 
 ### Type Safety
+
 - [ ] Add/update JSDoc comments for public functions
 - [ ] Update TypeScript definitions in `index.d.ts` if needed
 - [ ] Use proper type annotations
@@ -59,6 +66,7 @@ Refactor the specified file or code pattern following Avada Development standard
 ## Examples
 
 ### Extract Magic Strings
+
 ```javascript
 // BEFORE
 if (status === 'active') { ... }
@@ -72,6 +80,7 @@ if (type === TYPE.PERCENTAGE) { ... }
 ```
 
 ### Apply Early Return
+
 ```javascript
 // BEFORE
 function process(data) {
@@ -79,26 +88,27 @@ function process(data) {
     if (data.isValid) {
       return doSomething(data);
     } else {
-      return {error: 'Invalid'};
+      return { error: 'Invalid' };
     }
   } else {
-    return {error: 'No data'};
+    return { error: 'No data' };
   }
 }
 
 // AFTER
 function process(data) {
   if (!data) {
-    return {error: 'No data'};
+    return { error: 'No data' };
   }
   if (!data.isValid) {
-    return {error: 'Invalid'};
+    return { error: 'Invalid' };
   }
   return doSomething(data);
 }
 ```
 
 ### Extract Reusable Function
+
 ```javascript
 // BEFORE - Duplicated in multiple files
 const numericId = gid.replace(/.*\//, '');
@@ -111,11 +121,13 @@ export function extractNumericId(gid) {
 ```
 
 ### Shared Constants Pattern
+
 Place constants in `packages/functions/src/const/` for sharing between backend and frontend.
 
 **Important**: Assets can import from functions, but NOT the other way around.
 
 **Split files for bundle optimization** (critical for scripttag):
+
 ```
 packages/functions/src/const/{feature}/
 ├── index.js          # Barrel file - re-exports all
@@ -128,6 +140,7 @@ packages/functions/src/const/{feature}/
 **Note**: Collection names stay inline in repositories, not extracted to constants.
 
 ### Replace Switch/Else-If with Handler Map
+
 ```javascript
 // BEFORE - switch/if-else chain
 function handleAction(actionType, params) {
@@ -142,19 +155,20 @@ function handleAction(actionType, params) {
 
 // AFTER - data-driven handler map
 const ACTION_HANDLERS = {
-  discount_create: ({shop, params}) => executeDiscountCreate(shop, params),
-  customer_add_tags: ({shop, params}) => executeAddTags(shop, params),
-  order_cancel: ({shop, params}) => executeCancelOrder(shop, params)
+  discount_create: ({ shop, params }) => executeDiscountCreate(shop, params),
+  customer_add_tags: ({ shop, params }) => executeAddTags(shop, params),
+  order_cancel: ({ shop, params }) => executeCancelOrder(shop, params)
 };
 
 function handleAction(actionType, context) {
   const handler = ACTION_HANDLERS[actionType];
-  if (!handler) return {success: false, error: `Unknown action: ${actionType}`};
+  if (!handler) return { success: false, error: `Unknown action: ${actionType}` };
   return handler(context);
 }
 ```
 
 ### Extract Service Layer from Controller
+
 ```javascript
 // BEFORE - validation + business logic in controller
 export async function createSkill(ctx) {
@@ -188,6 +202,7 @@ export async function createSkill(ctx) {
 ```
 
 ### GraphQL Queries as Named Constants with Mappers
+
 ```javascript
 // BEFORE - inline query + inline transformation
 export async function searchProducts(shopData, q) {
@@ -219,6 +234,7 @@ export async function searchProducts(shopData, q, limit) {
 ```
 
 **Import patterns**:
+
 ```javascript
 // Backend - import from barrel
 import { STATUS, VALIDATION, METAFIELD } from '@functions/const/feature';
@@ -227,10 +243,11 @@ import { STATUS, VALIDATION, METAFIELD } from '@functions/const/feature';
 import { STATUS, DEFAULT_SETTINGS } from '@functions/const/feature';
 
 // Scripttag - import specific file for minimal bundle
-import { DEFAULT_SETTINGS } from '@functions/const/feature/widget';
+import {} from '@functions/const/feature/widget';
 ```
 
 **Barrel file** (`index.js`):
+
 ```javascript
 // Scripttag-safe (lightweight)
 export { STATUS, TYPE } from './status';
@@ -241,4 +258,4 @@ export { VALIDATION } from './validation';
 export { METAFIELD } from './metafield';
 ```
 
-Now analyze and refactor: $ARGUMENTS
+Now analyze and refactor: \$ARGUMENTS

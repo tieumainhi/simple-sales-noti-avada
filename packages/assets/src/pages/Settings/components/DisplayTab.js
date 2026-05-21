@@ -67,7 +67,7 @@ const DisplayTab = ({
               ))}
             </Box>
           </BlockStack>
-          <Text as="p" ton e="subdued" variant="bodySm">
+          <Text as="p" tone="subdued" variant="bodySm">
             The display position of the pop on your website.
           </Text>
         </BlockStack>

@@ -16,7 +16,7 @@ const NotificationPopup = ({
     <div className="Avava-SP__Wrapper fadeInUp animated">
       <div className="Avava-SP__Inner">
         <div className="Avava-SP__Container">
-          <a href="#" className={'Avava-SP__LinkWrapper'}>
+          <a href="/" className={'Avava-SP__LinkWrapper'} onClick={event => event.preventDefault()}>
             <div
               className="Avava-SP__Image"
               style={{
@@ -34,7 +34,7 @@ const NotificationPopup = ({
                 {timestamp}{' '}
                 <InlineStack className="uni-blue" gap={100}>
                   <Icon source={CheckIcon} tone="info" />
-                  <Text variant="" tone="success">
+                  <Text as="span" variant="bodySm" tone="success">
                     by AVADA
                   </Text>
                 </InlineStack>
@@ -51,7 +51,7 @@ NotificationPopup.propTypes = {
   firstName: PropTypes.string,
   city: PropTypes.string,
   country: PropTypes.string,
-  productName: PropTypes.func,
+  productName: PropTypes.string,
   productImage: PropTypes.string,
   timestamp: PropTypes.string
 };
