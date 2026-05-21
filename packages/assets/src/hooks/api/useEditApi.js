@@ -1,8 +1,8 @@
-import {useState} from 'react';
-import {api} from '@assets/helpers';
-import {useStore} from '@assets/reducers/storeReducer';
-import {setToast} from '@assets/actions/storeActions';
-import {handleError} from '@assets/services/errorService';
+import { useState } from 'react';
+import { api } from '@assets/helpers';
+import { useStore } from '@assets/reducers/storeReducer';
+import { setToast } from '@assets/actions/storeActions';
+import { handleError } from '@assets/services/errorService';
 
 /**
  * @param url
@@ -23,7 +23,7 @@ export default function useEditApi({
   successMsg = 'Saved successfully',
   errorMsg = 'Failed to save'
 }) {
-  const {dispatch} = useStore();
+  const { dispatch } = useStore();
   const [editing, setEditing] = useState(defaultState);
 
   /**
@@ -34,9 +34,9 @@ export default function useEditApi({
   const handleEdit = async (data, newEditing = true) => {
     try {
       setEditing(prev =>
-        typeof newEditing === 'boolean' ? newEditing : {...prev, [newEditing]: true}
+        typeof newEditing === 'boolean' ? newEditing : { ...prev, [newEditing]: true }
       );
-      const resp = await api(url, {body: data, method: 'PUT'});
+      const resp = await api(url, { body: data, method: 'PUT' });
       if (resp.success && useToast) {
         setToast(dispatch, resp.message || successMsg);
         successCallback(resp);
@@ -48,13 +48,13 @@ export default function useEditApi({
     } catch (e) {
       handleError(e);
       setToast(dispatch, errorMsg, true);
-      return fullResp ? {success: false, error: e.message} : false;
+      return fullResp ? { success: false, error: e.message } : false;
     } finally {
       setEditing(prev =>
-        typeof newEditing === 'boolean' ? !newEditing : {...prev, [newEditing]: false}
+        typeof newEditing === 'boolean' ? !newEditing : { ...prev, [newEditing]: false }
       );
     }
   };
 
-  return {editing, handleEdit};
+  return { editing, handleEdit };
 }

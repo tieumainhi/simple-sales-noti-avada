@@ -1,0 +1,156 @@
+.SalesPop-ListHeader {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  min-height: 5.2rem;
+  padding: 0 1.6rem;
+}
+
+.SalesPop-Sort {
+  width: 22rem;
+}
+
+.SalesPop-NotificationRow {
+  align-items: center;
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: auto minmax(28rem, 1fr) 16rem;
+  min-height: 13rem;
+  padding: 1.6rem;
+}
+
+.SalesPop-NotificationPreview {
+  max-width: 34rem;
+}
+
+.SalesPop-NotificationDate {
+  justify-self: end;
+  max-width: 12rem;
+}
+
+.SalesPop-Pagination {
+  display: flex;
+  justify-content: center;
+  margin: 1.2rem 0;
+}
+
+.SalesPop-SettingsGrid {
+  align-items: start;
+  display: grid;
+  gap: 4rem;
+  grid-template-columns: minmax(22rem, 30rem) minmax(46rem, 1fr);
+}
+
+.SalesPop-SettingsPanel {
+  min-height: 64rem;
+  padding: 0 1.6rem;
+}
+
+.SalesPop-PreviewColumn {
+  padding-top: 0.8rem;
+}
+
+.SalesPop-SectionTitle {
+  color: #202223;
+  font-size: 1.1rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  margin: 2rem 0 1.2rem;
+  text-transform: uppercase;
+}
+
+.SalesPop-FieldLabel {
+  margin-bottom: 0.4rem;
+}
+
+.SalesPop-PositionGrid {
+  display: grid;
+  gap: 1.2rem;
+  grid-template-columns: repeat(4, minmax(8rem, 1fr));
+}
+
+.SalesPop-PositionCard {
+  background: #fff;
+  border: 0.1rem solid #dfe3e8;
+  border-radius: 0.6rem;
+  height: 6.4rem;
+  padding: 0.8rem;
+  position: relative;
+}
+
+.SalesPop-PositionCard::before {
+  background: #f1f2f4;
+  border-radius: 0.2rem;
+  content: '';
+  display: block;
+  height: 1.6rem;
+  position: absolute;
+  width: 4.8rem;
+}
+
+.SalesPop-PositionCard.is-selected {
+  border-color: #5c6ac4;
+  box-shadow: 0 0 0 0.1rem #5c6ac4;
+}
+
+.SalesPop-PositionCard.is-selected::after {
+  background: #5c6ac4;
+  border-radius: 0.2rem;
+  content: '';
+  display: block;
+  height: 1.6rem;
+  position: absolute;
+  width: 4.8rem;
+}
+
+.SalesPop-PositionCard--bottom-left::before,
+.SalesPop-PositionCard--bottom-left::after {
+  bottom: 0.8rem;
+  left: 0.8rem;
+}
+
+.SalesPop-PositionCard--bottom-right::before,
+.SalesPop-PositionCard--bottom-right::after {
+  bottom: 0.8rem;
+  right: 0.8rem;
+}
+
+.SalesPop-PositionCard--top-left::before,
+.SalesPop-PositionCard--top-left::after {
+  left: 0.8rem;
+  top: 0.8rem;
+}
+
+.SalesPop-PositionCard--top-right::before,
+.SalesPop-PositionCard--top-right::after {
+  right: 0.8rem;
+  top: 0.8rem;
+}
+
+.SalesPop-TimingGrid {
+  display: grid;
+  gap: 2rem 3.2rem;
+  grid-template-columns: repeat(2, minmax(24rem, 1fr));
+}
+
+.SalesPop-TriggerFields {
+  display: grid;
+  gap: 1.6rem;
+  margin-top: 1.2rem;
+}
+
+@media (max-width: 900px) {
+  .SalesPop-NotificationRow,
+  .SalesPop-SettingsGrid,
+  .SalesPop-TimingGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .SalesPop-NotificationDate {
+    justify-self: start;
+  }
+
+  .SalesPop-PositionGrid {
+    grid-template-columns: repeat(2, minmax(8rem, 1fr));
+  }
+}

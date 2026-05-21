@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Box,
   EmptySearchResult,
@@ -12,8 +12,8 @@ import {
   useSetIndexFiltersMode
 } from '@shopify/polaris';
 import formatDateTime from '@avada/functions/src/helpers/datetime/formatDateTime';
-import {getUniqueArrayObject} from '@assets/helpers/getUniqueArrayObject';
-import {commonItemPages} from '@assets/const/paginationOptions';
+import { getUniqueArrayObject } from '@assets/helpers/getUniqueArrayObject';
+import { commonItemPages } from '@assets/const/paginationOptions';
 import useFetchApi from '../api/useFetchApi';
 import './useAdvancedIndexTable.scss';
 
@@ -70,7 +70,7 @@ export default function useAdvancedIndexTable({
   loadMore = false,
   initLoad = true,
   selection = [],
-  resourceData = [{singular: 'data', plural: 'data'}],
+  resourceData = [{ singular: 'data', plural: 'data' }],
   setSelection = _ => {},
   selectable = false,
   searchable = false,
@@ -94,7 +94,7 @@ export default function useAdvancedIndexTable({
     initLoad
   });
   const items = prepareItems(data) || [];
-  const {hasNext, hasPre, totalPage = 0} = pageInfo;
+  const { hasNext, hasPre, totalPage = 0 } = pageInfo;
   const [page, setPage] = useState(1);
   const [typing, setTyping] = useState(false);
   const [currentSelected, setCurrentSelected] = useState([]);
@@ -135,7 +135,7 @@ export default function useAdvancedIndexTable({
     totalCount
   ]);
 
-  function getDataSelectedObject({selectionType = 'single', selectedValue, toggleType = false}) {
+  function getDataSelectedObject({ selectionType = 'single', selectedValue, toggleType = false }) {
     const allData = data;
     const allDataId = data.map(item => item.id);
 
@@ -160,10 +160,10 @@ export default function useAdvancedIndexTable({
   };
 
   const handleQueryChange = (key, value, isFetch = false) => {
-    const customQueries = {[key]: value};
-    setQueries(prev => ({...prev, ...customQueries}));
+    const customQueries = { [key]: value };
+    setQueries(prev => ({ ...prev, ...customQueries }));
     if (isFetch) {
-      handleFetchApi({customQueries}).then();
+      handleFetchApi({ customQueries }).then();
     }
   };
 
@@ -186,9 +186,9 @@ export default function useAdvancedIndexTable({
    * @param endpoint
    * @returns {Promise<void>}
    */
-  const handleFetchApi = async ({paginate = '', customQueries = {}} = {}) => {
+  const handleFetchApi = async ({ paginate = '', customQueries = {} } = {}) => {
     setTyping(false);
-    const paramQueries = {...convertQueriesParams(queries), ...customQueries};
+    const paramQueries = { ...convertQueriesParams(queries), ...customQueries };
     let keepPreviousData = false;
     switch (paginate) {
       case 'prev':
@@ -209,7 +209,7 @@ export default function useAdvancedIndexTable({
         paramQueries.page = 1;
         break;
     }
-    const params = {...paramQueries};
+    const params = { ...paramQueries };
     await fetchApi(fetchUrl, formatParams(params), keepPreviousData);
     setPage(paramQueries.page);
   };
@@ -228,7 +228,7 @@ export default function useAdvancedIndexTable({
     }
   }, [selection]);
 
-  const {Row, Cell} = IndexTable;
+  const { Row, Cell } = IndexTable;
   const renderItem = useMemo(
     () => (
       <>
@@ -250,7 +250,7 @@ export default function useAdvancedIndexTable({
     [items, currentSelected, renderItemCols]
   );
 
-  const {mode, setMode} = useSetIndexFiltersMode(IndexFiltersMode.Filtering);
+  const { mode, setMode } = useSetIndexFiltersMode(IndexFiltersMode.Filtering);
 
   const searchBar = (
     <div onKeyDown={event => event.key === 'Enter' && handleFetchApi()}>
@@ -272,17 +272,17 @@ export default function useAdvancedIndexTable({
 
   const pagination = (
     <InlineStack blockAlign="center" align="center">
-      <div style={{flex: '1 1 150px'}} />
+      <div style={{ flex: '1 1 150px' }} />
       <Pagination
         hasPrevious={hasPre && !loading}
-        onPrevious={() => handleFetchApi({paginate: 'prev'})}
+        onPrevious={() => handleFetchApi({ paginate: 'prev' })}
         hasNext={hasNext && !loading}
-        onNext={() => handleFetchApi({paginate: 'next'})}
+        onNext={() => handleFetchApi({ paginate: 'next' })}
         label={`Page ${[page, totalPage].filter(Boolean).join(' / ')}`}
         previousTooltip="Previous"
         nextTooltip="Next"
       />
-      <div style={{flex: 1}} />
+      <div style={{ flex: 1 }} />
       <InlineStack gap="200">
         <Text as="span">Items per page</Text>
         <Select

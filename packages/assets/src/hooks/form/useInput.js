@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import { useState } from 'react';
 
 /**
  * @param defaultState
@@ -7,7 +7,7 @@ import {useState} from 'react';
 export default function useInput(defaultState = null) {
   const [input, setInput] = useState(defaultState);
 
-  const handleInputChange = (key, value) => setInput(prev => ({...prev, [key]: value}));
+  const handleInputChange = (key, value) => setInput(prev => ({ ...prev, [key]: value }));
 
   return [input, handleInputChange, setInput];
 }

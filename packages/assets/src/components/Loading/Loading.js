@@ -1,5 +1,5 @@
 import React from 'react';
-import {Spinner} from '@shopify/polaris';
+import { Spinner } from '@shopify/polaris';
 import NotFound from '@assets/pages/NotFound/NotFound';
 import PropTypes from 'prop-types';
 import '@assets/styles/preloader.scss';
@@ -10,7 +10,7 @@ import '@assets/styles/preloader.scss';
  * @returns {JSX.Element|null}
  * @constructor
  */
-export default function Loading({error, pastDelay = true}) {
+export default function Loading({ error, pastDelay = true }) {
   if (error) {
     console.error(error);
     return <NotFound />;

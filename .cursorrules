@@ -82,6 +82,7 @@ Folder Guidelines:
 
 3. React Guidelines:
 - Use .js only, no jsx file
+- This project is a Shopify embedded app. Prefer Shopify Polaris layout primitives and components for admin UI, navigation, loading, feedback, forms, tables, empty states, thumbnails, and page structure before creating custom markup/CSS. Custom layout should be limited to app-specific shell behavior or visual gaps not covered by Polaris.
 - When create a page, make sure to register a loadable file as well to make sure the page is created and chunk-splitted
 - All frontend routes should be registered in @assets/src/routes/routes.js
 - Loadable components structure:

@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Modal} from '@shopify/polaris';
+import React, { useState } from 'react';
+import { Modal } from '@shopify/polaris';
 
 /**
  * @param title
@@ -35,11 +35,11 @@ export default function useViewModal({
       open={open}
       onClose={() => handleClose()}
       title={title}
-      secondaryActions={[{content: 'Close', onAction: () => handleClose()}]}
+      secondaryActions={[{ content: 'Close', onAction: () => handleClose() }]}
     >
       {content}
     </Modal>
   );
 
-  return {modal, open, closeModal, openModal};
+  return { modal, open, closeModal, openModal };
 }

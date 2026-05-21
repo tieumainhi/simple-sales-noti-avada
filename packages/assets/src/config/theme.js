@@ -4,6 +4,8 @@ export const LOGO_URL =
 export const LOGO_WIDTH = 40;
 const PRIMARY_COLOR = '#1983ff';
 
+export const LOGO_EMBED_WIDTH = 120;
+
 const theme = {
   colors: {
     primary: PRIMARY_COLOR,

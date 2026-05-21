@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Card, InlineStack, Layout, Page, Text } from '@shopify/polaris';
+import './Home.scss';
 
 /**
  * Render a home page for overview
@@ -11,18 +12,27 @@ export default function Home() {
   const [enabled, setEnabled] = useState(false);
 
   return (
-    <Page title="Home">
+    <Page fullWidth title="Home">
       <Layout>
         <Layout.Section>
           <Card>
             <InlineStack align="space-between" blockAlign="center">
-              <Text as="span">App status is {enabled ? 'enabled' : 'disabled'}</Text>
-              <Button
-                variant={enabled ? 'secondary' : 'primary'}
-                onClick={() => setEnabled(prev => !prev)}
-              >
-                {enabled ? 'Disable' : 'Enable'}
-              </Button>
+              <InlineStack blockAlign="center" gap="100" wrap={false}>
+                <Text as="span" variant="bodyMd">
+                  App status is
+                </Text>
+                <Text as="span" variant="bodyMd" fontWeight="bold">
+                  {enabled ? 'enabled' : 'disabled'}
+                </Text>
+              </InlineStack>
+              <div className="SalesPop-HomeStatusButton">
+                <Button
+                  variant={enabled ? 'secondary' : 'primary'}
+                  onClick={() => setEnabled(prev => !prev)}
+                >
+                  {enabled ? 'Disable' : 'Enable'}
+                </Button>
+              </div>
             </InlineStack>
           </Card>
         </Layout.Section>

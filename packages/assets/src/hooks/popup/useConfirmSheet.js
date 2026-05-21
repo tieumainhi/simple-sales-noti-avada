@@ -1,6 +1,6 @@
-import React, {useRef, useState} from 'react';
-import {Button, Sheet, Text} from '@shopify/polaris';
-import {XSmallIcon} from '@shopify/polaris-icons';
+import React, { useRef, useState } from 'react';
+import { Button, Sheet, Text } from '@shopify/polaris';
+import { XSmallIcon } from '@shopify/polaris-icons';
 
 /**
  * @param Header
@@ -51,7 +51,7 @@ export default function useConfirmSheet({
     }, 500);
   };
 
-  const params = {input, closeCallback, closeSheet, openSheet};
+  const params = { input, closeCallback, closeSheet, openSheet };
 
   const sheet = (
     <Sheet accessibilityLabel="" open={open} onClose={() => closeSheet()}>
@@ -69,5 +69,5 @@ export default function useConfirmSheet({
     </Sheet>
   );
 
-  return {sheet, open, closeSheet, openSheet};
+  return { sheet, open, closeSheet, openSheet };
 }

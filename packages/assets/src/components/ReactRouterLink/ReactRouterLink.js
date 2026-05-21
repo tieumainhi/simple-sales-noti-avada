@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 /**
@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
  * @return {React.ReactElement}
  * @constructor
  */
-export default function ReactRouterLink({children, url = '', ...rest}) {
+export default function ReactRouterLink({ children, url = '', ...rest }) {
   // Use an regular a tag for external and download links
   if (isOutboundLink(url) || rest.download || rest.external) {
     if (rest.external) {

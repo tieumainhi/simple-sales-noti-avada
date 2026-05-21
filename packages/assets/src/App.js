@@ -1,17 +1,17 @@
 import React from 'react';
-import {Router} from 'react-router-dom';
+import { Router } from 'react-router-dom';
 import ReactRouterLink from '@assets/components/ReactRouterLink/ReactRouterLink';
-import {AppProvider} from '@shopify/polaris';
+import { AppProvider } from '@shopify/polaris';
 import translations from '@shopify/polaris/locales/en.json';
-import {history} from '@assets/history';
+import { history } from '@assets/history';
 import ErrorBoundary from '@assets/components/ErrorBoundary';
 import Routes from './routes/routes';
 import PropTypes from 'prop-types';
 import AppBridgeProvider from '@assets/components/AppBridgeProvider';
-import {isEmbeddedApp} from '@assets/config/app';
+import { isEmbeddedApp } from '@assets/config/app';
 import AppEmbeddedLayout from '@assets/layouts/EmbeddedLayout/AppEmbeddedLayout';
 import AppFullLayout from '@assets/layouts/FullLayout/AppFullLayout';
-import {MaxModalProvider} from '@assets/contexts/maxModalContext';
+import { MaxModalProvider } from '@assets/contexts/maxModalContext';
 
 /**
  * The main endpoint of application contains all routes, settings for redux and Polaris
@@ -35,7 +35,7 @@ export default function App() {
   );
 }
 
-const MainLayout = ({children}) => {
+const MainLayout = ({ children }) => {
   return isEmbeddedApp ? (
     <AppBridgeProvider>
       <AppEmbeddedLayout>{children}</AppEmbeddedLayout>

@@ -1,17 +1,13 @@
-import {SettingsIcon, ShareIcon} from '@shopify/polaris-icons';
+import { NotificationIcon, SettingsIcon } from '@shopify/polaris-icons';
 
 const menuIcons = [
   {
-    icon: ShareIcon,
-    destination: '/samples'
+    icon: NotificationIcon,
+    destination: '/notifications'
   },
   {
     icon: SettingsIcon,
     destination: '/settings'
-  },
-  {
-    icon: SettingsIcon,
-    destination: '/optional-scopes'
   }
 ];
 

@@ -25,11 +25,14 @@ module.exports = {
     'react'
   ],
   'rules': {
-    'prettier/prettier': ['error', {bracketSpacing: true}]
+    'prettier/prettier': ['error', { bracketSpacing: true }],
+    'react/react-in-jsx-scope': 'off',
+    'react/jsx-uses-react': 'off',
+    'spaced-comment': 'off'
   },
   'settings': {
     'react': {
-      'version': '^16.8.6'
+      'version': 'detect'
     }
   },
 };

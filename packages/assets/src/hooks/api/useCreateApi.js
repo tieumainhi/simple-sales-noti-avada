@@ -1,8 +1,8 @@
-import {useState} from 'react';
-import {api} from '@assets/helpers';
-import {useStore} from '@assets/reducers/storeReducer';
-import {setToast} from '@assets/actions/storeActions';
-import {handleError} from '@assets/services/errorService';
+import { useState } from 'react';
+import { api } from '@assets/helpers';
+import { useStore } from '@assets/reducers/storeReducer';
+import { setToast } from '@assets/actions/storeActions';
+import { handleError } from '@assets/services/errorService';
 
 /**
  * @param url
@@ -19,7 +19,7 @@ export default function useCreateApi({
   successMsg = 'Saved successfully',
   errorMsg = 'Failed to save'
 }) {
-  const {dispatch} = useStore();
+  const { dispatch } = useStore();
   const [creating, setCreating] = useState(false);
 
   /**
@@ -29,7 +29,7 @@ export default function useCreateApi({
   const handleCreate = async data => {
     try {
       setCreating(true);
-      const resp = await api(url, {body: data, method: 'POST'});
+      const resp = await api(url, { body: data, method: 'POST' });
       if (resp.success) {
         setToast(dispatch, resp.message || successMsg);
         successCallback(resp);
@@ -41,11 +41,11 @@ export default function useCreateApi({
     } catch (e) {
       handleError(e);
       setToast(dispatch, errorMsg, true);
-      return fullResp ? {success: false, error: e.message} : false;
+      return fullResp ? { success: false, error: e.message } : false;
     } finally {
       setCreating(false);
     }
   };
 
-  return {creating, handleCreate};
+  return { creating, handleCreate };
 }

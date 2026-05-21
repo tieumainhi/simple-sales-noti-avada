@@ -10,7 +10,7 @@ import {
   TextField
 } from '@shopify/polaris';
 import useAdvancedIndexTable from '@assets/hooks/table/useAdvancedIndexTable';
-import {DeleteIcon, EditIcon} from '@shopify/polaris-icons';
+import { DeleteIcon, EditIcon } from '@shopify/polaris-icons';
 import formatDateTime from '@functions/helpers/datetime/formatDateTime';
 import useEditApi from '@assets/hooks/api/useEditApi';
 import useConfirmModal from '@assets/hooks/popup/useConfirmModal';
@@ -58,50 +58,51 @@ export default function ActionTable() {
     </BlockStack>
   );
 
-  const {creating, handleCreate} = useCreateApi({
+  const { creating, handleCreate } = useCreateApi({
     url: '/subscriptions',
     successCallback: () => refetchData()
   });
 
-  const {editing, handleEdit} = useEditApi({
+  const { editing, handleEdit } = useEditApi({
     url: '/subscriptions',
     successCallback: () => refetchData()
   });
 
-  const {deleting, handleDelete} = useDeleteApi({
+  const { deleting, handleDelete } = useDeleteApi({
     url: '/subscriptions',
     successCallback: () => refetchData()
   });
 
-  const {modal: addModal, openModal: openAddModal} = useConfirmModal({
+  const { modal: addModal, openModal: openAddModal } = useConfirmModal({
     title: 'Add subscription',
     content: inputForm(),
     loading: creating,
     confirmAction: () => handleCreate(inputTopic)
   });
 
-  const {modal: editModal, openModal: openEditModal} = useConfirmModal({
+  const { modal: editModal, openModal: openEditModal } = useConfirmModal({
     title: 'Edit subscription',
     content: inputForm(),
     loading: editing,
     confirmAction: () => handleEdit(inputTopic)
   });
 
-  const {modal: deleteModal, openModal: openDeleteModal} = useConfirmModal({
+  const { modal: deleteModal, openModal: openDeleteModal } = useConfirmModal({
     title: 'Delete subscription',
     content: '',
     destructive: true,
     loading: deleting,
     // eslint-disable-next-line react/display-name,react/prop-types
-    ComponentContent: ({currentId: data}) => (
+    ComponentContent: ({ currentId: data }) => (
       <>
         {'This will delete subscription '}
         <Text as="span" fontWeight="semibold">
+          {/* eslint-disable-next-line react/prop-types */}
           {data.current.plan}
         </Text>
       </>
     ),
-    confirmAction: ({id}) => handleDelete({id})
+    confirmAction: ({ id }) => handleDelete({ id })
   });
 
   /**
@@ -110,7 +111,7 @@ export default function ActionTable() {
    * @returns {React.JSX.Element[]}
    */
   const itemCols = (item, index) => {
-    const {plan, startsAt, endsAt, createdAt} = item;
+    const { plan, startsAt, endsAt, createdAt } = item;
     return [
       <div key={index}>{plan}</div>,
       <div key={index}>{formatDateTime(startsAt)}</div>,
@@ -137,12 +138,12 @@ export default function ActionTable() {
     ];
   };
 
-  const {dataTable, refetchData} = useAdvancedIndexTable({
-    resourceData: {singular: 'subscription', plural: 'subscriptions'},
+  const { dataTable, refetchData } = useAdvancedIndexTable({
+    resourceData: { singular: 'subscription', plural: 'subscriptions' },
     fetchUrl: '/subscriptions',
-    columns: ['Plan', 'Start at', 'End at', 'Created at', 'Actions'].map(title => ({title})),
-    initQueries: {sort: 'createdAt_desc', limit: '20', hasCount: true},
-    customKeys: {hasCount: true},
+    columns: ['Plan', 'Start at', 'End at', 'Created at', 'Actions'].map(title => ({ title })),
+    initQueries: { sort: 'createdAt_desc', limit: '20', hasCount: true },
+    customKeys: { hasCount: true },
     defaultOrder: 'createdAt_desc',
     defaultLimit: '20',
     renderItemCols: itemCols,
@@ -152,7 +153,7 @@ export default function ActionTable() {
     emptyState: (
       <EmptyState
         heading="Add your subscription"
-        action={{onAction: () => handleAddTopic(), content: 'Add subscription'}}
+        action={{ onAction: () => handleAddTopic(), content: 'Add subscription' }}
         image="https://cdn.shopify.com/s/files/1/0262/4071/2726/files/emptystate-files.png"
       >
         {`Add subscriptions for testing purposes`}

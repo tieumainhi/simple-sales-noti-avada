@@ -5,7 +5,7 @@
  * @returns {*}
  */
 export default function getDomain(shop = {}) {
-  const {domain, shopifyDomain} = shop;
+  const { domain, shopifyDomain } = shop;
 
   if (domain) {
     return domain.replace('https://', '').replace('http://', '');

@@ -1,5 +1,5 @@
-import React, {useCallback, useRef, useState} from 'react';
-import {Form, Modal} from '@shopify/polaris';
+import React, { useCallback, useRef, useState } from 'react';
+import { Form, Modal } from '@shopify/polaris';
 
 /**
  *
@@ -93,13 +93,13 @@ export default function useConfirmModal({
       {content ||
         (useForm ? (
           <Form onSubmit={() => handleConfirm()} preventDefault>
-            <ComponentContent {...{closeModal, currentId}} />
+            <ComponentContent {...{ closeModal, currentId }} />
           </Form>
         ) : (
-          <ComponentContent {...{closeModal, currentId}} />
+          <ComponentContent {...{ closeModal, currentId }} />
         ))}
     </Modal>
   );
 
-  return {modal, open, closeModal, openModal};
+  return { modal, open, closeModal, openModal };
 }

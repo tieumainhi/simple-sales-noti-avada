@@ -1,0 +1,13 @@
+.SalesPop-HomeStatusButton {
+  .Polaris-Button--variantPrimary {
+    background: #008060;
+    border-color: #008060;
+    box-shadow: none;
+  }
+
+  .Polaris-Button--variantPrimary:hover,
+  .Polaris-Button--variantPrimary:active {
+    background: #006e52;
+    border-color: #006e52;
+  }
+}

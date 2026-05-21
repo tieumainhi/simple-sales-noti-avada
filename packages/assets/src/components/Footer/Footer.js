@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, FooterHelp, Layout} from '@shopify/polaris';
+import { Button, FooterHelp, Layout } from '@shopify/polaris';
 import './Footer.css';
 
 export default function Footer() {

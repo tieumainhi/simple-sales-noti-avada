@@ -1,14 +1,15 @@
-import React, {useRef} from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import {
   Badge,
+  BlockStack,
   Button,
   Card,
   EmptyState,
+  InlineStack,
   SkeletonBodyText,
   SkeletonDisplayText,
   Spinner,
-  LegacyStack,
   TextContainer,
   TextField,
   Text
@@ -16,30 +17,38 @@ import {
 import usePaginate from '@assets/hooks/api/usePaginate';
 import SheetBody from '@assets/components/Sheet/SheetBody';
 import SheetHeader from '@assets/components/Sheet/SheetHeader';
-import {SearchIcon} from '@shopify/polaris-icons';
+import { SearchIcon } from '@shopify/polaris-icons';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
-import {formatDateOnly} from '@assets/helpers/utils/formatFullTime';
+import { formatDateOnly } from '@assets/helpers/utils/formatFullTime';
 import useInput from '@assets/hooks/form/useInput';
 
 const CATEGORY_UPDATE_ID = 445;
 const APP_NEWS_URL = 'https://blog.avada.io/resources';
-const DEFAULT_SEARCH = {openSearch: false, searchValue: ''};
+const DEFAULT_SEARCH = { openSearch: false, searchValue: '' };
 
 /**
  * @param closeSheet
  * @returns {JSX.Element}
  * @constructor
  */
-export default function AppNewsSheet({closeSheet}) {
+export default function AppNewsSheet({ closeSheet }) {
   const lastSearchValue = useRef('');
   const [actions, handleActionsChange, setActions] = useInput(DEFAULT_SEARCH);
-  const {data, pageInfo, fetched, loading, nextPage, onQueryChange, onQueriesChange} = usePaginate({
+  const {
+    data,
+    pageInfo,
+    fetched,
+    loading,
+    nextPage,
+    onQueryChange,
+    onQueriesChange
+  } = usePaginate({
     url: '/appNews',
     defaultLimit: 2,
     defaultSort: 'published_at:desc',
-    initQueries: {categories: CATEGORY_UPDATE_ID},
+    initQueries: { categories: CATEGORY_UPDATE_ID },
     keepPreviousData: true
   });
 
@@ -53,7 +62,7 @@ export default function AppNewsSheet({closeSheet}) {
 
   const onSearch = () => {
     lastSearchValue.current = actions.searchValue;
-    onQueriesChange({page: 1, searchKey: actions.searchValue}, true);
+    onQueriesChange({ page: 1, searchKey: actions.searchValue }, true);
   };
 
   const toggleSearch = () => {
@@ -75,46 +84,44 @@ export default function AppNewsSheet({closeSheet}) {
   return (
     <>
       <SheetHeader handleClose={closeSheet} loading={loading}>
-        <LegacyStack alignment="center">
-          <LegacyStack.Item fill>
-            {actions.openSearch ? (
-              <div onKeyDown={event => event.keyCode === 13 && onSearch()}>
-                <TextField
-                  label=""
-                  autoFocus
-                  value={actions.searchValue}
-                  placeholder="Search by title"
-                  onChange={val => handleActionsChange('searchValue', val)}
-                  suffix={
-                    loading && (
-                      <div style={{marginTop: '5px'}}>
-                        <Spinner size="small" />
-                      </div>
-                    )
-                  }
-                  autoComplete="off"
-                />
-              </div>
-            ) : (
-              <Text variant="headingLg" as="p">
-                {"What's new on Avada"}
-              </Text>
-            )}
-          </LegacyStack.Item>
-        </LegacyStack>
+        <div style={{ width: '100%' }}>
+          {actions.openSearch ? (
+            <div onKeyDown={event => event.keyCode === 13 && onSearch()}>
+              <TextField
+                label=""
+                autoFocus
+                value={actions.searchValue}
+                placeholder="Search by title"
+                onChange={val => handleActionsChange('searchValue', val)}
+                suffix={
+                  loading && (
+                    <div style={{ marginTop: '5px' }}>
+                      <Spinner size="small" />
+                    </div>
+                  )
+                }
+                autoComplete="off"
+              />
+            </div>
+          ) : (
+            <Text variant="headingLg" as="p">
+              {"What's new on Avada"}
+            </Text>
+          )}
+        </div>
         {!actions.openSearch && loading && (
-          <div style={{marginTop: '5px'}}>
+          <div style={{ marginTop: '5px' }}>
             <Spinner size="small" />
           </div>
         )}
-        <div style={{marginRight: '1rem'}} />
+        <div style={{ marginRight: '1rem' }} />
         <Button
           icon={SearchIcon}
           disabled={loading}
           onClick={() => toggleSearch()}
           variant="plain"
         />
-        <div style={{marginRight: '1rem'}} />
+        <div style={{ marginRight: '1rem' }} />
       </SheetHeader>
       <SheetBody
         footer={false}
@@ -123,17 +130,17 @@ export default function AppNewsSheet({closeSheet}) {
         classNames={['Avada-Sheet__AppNews']}
         onScrolledToBottom={() => loadMoreOnScroll()}
       >
-        <LegacyStack vertical>
+        <BlockStack gap="400">
           {!fetched && <AppNewsSkeleton loop={2} />}
           {data.map((item, index) => (
             <Card sectioned key={index}>
-              <LegacyStack alignment="center" spacing="tight">
+              <InlineStack blockAlign="center" gap="200">
                 <Badge status="success">{category(item).title}</Badge>
                 <Text variant="bodyMd" as="span" color="subdued">
                   {formatDateOnly(item.updated_at)}
                 </Text>
-              </LegacyStack>
-              <div style={{marginBottom: '1rem'}} />
+              </InlineStack>
+              <div style={{ marginBottom: '1rem' }} />
               <Button
                 url={prepareUrl(item)}
                 removeUnderline
@@ -162,7 +169,7 @@ export default function AppNewsSheet({closeSheet}) {
               Try changing the filters or search term
             </EmptyState>
           )}
-        </LegacyStack>
+        </BlockStack>
       </SheetBody>
     </>
   );
@@ -172,7 +179,7 @@ AppNewsSheet.propTypes = {
   closeSheet: PropTypes.func
 };
 
-const AppNewsSkeleton = ({loop = 1}) => {
+const AppNewsSkeleton = ({ loop = 1 }) => {
   return Array.from(Array(loop)).map((value, key) => (
     <Card sectioned key={key}>
       <TextContainer>

@@ -1,5 +1,5 @@
-import {createBrowserHistory} from 'history';
-import {getUrl} from '@assets/helpers/getUrl';
+import { createBrowserHistory } from 'history';
+import { getUrl } from '@assets/helpers/getUrl';
 
 function createBrowserHistoryWithBasename(basename = getUrl('')) {
   const history = createBrowserHistory();

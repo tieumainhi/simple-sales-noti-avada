@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   ActionList,
   BlockStack,
@@ -10,15 +10,15 @@ import {
   Text,
   Tooltip
 } from '@shopify/polaris';
-import {XIcon} from '@shopify/polaris-icons';
-import {MaxModalContext} from '@assets/contexts/maxModalContext';
+import { XIcon } from '@shopify/polaris-icons';
+import { MaxModalContext } from '@assets/contexts/maxModalContext';
 import isEmbeddedAppEnv from '@assets/helpers/isEmbeddedAppEnv';
 
 /**
  * @return {JSX.Element}
  */
 export default function FullscreenPageA() {
-  const {isFullscreen, openFullscreen, setOpenMaxModal} = useContext(MaxModalContext);
+  const { isFullscreen, openFullscreen, setOpenMaxModal } = useContext(MaxModalContext);
   const [popoverActive, setPopoverActive] = useState(false);
 
   useEffect(() => {

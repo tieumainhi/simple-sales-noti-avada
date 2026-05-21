@@ -5,27 +5,27 @@ import {
   Card,
   FormLayout,
   Icon,
+  InlineStack,
   Layout,
   Link,
   List,
-  Page,
-  LegacyStack
+  Page
 } from '@shopify/polaris';
 import React from 'react';
 import PropTypes from 'prop-types';
-import {getRawSupport} from '@assets/services/crispService';
+import { getRawSupport } from '@assets/services/crispService';
 
-export default function IntegrationTemplate({app, children}) {
+export default function IntegrationTemplate({ app, children }) {
   return (
     <Page
-      backAction={{url: '/integrations'}}
+      backAction={{ url: '/integrations' }}
       fullWidth
       title={
-        <LegacyStack alignment="center" spacing="tight">
+        <InlineStack blockAlign="center" gap="200">
           {app.img && <img src={app.img} alt={app.title} width={45} />}
           {app.icon && <Icon source={app.icon} />}
-          <LegacyStack.Item>{app.title}</LegacyStack.Item>
-        </LegacyStack>
+          <span>{app.title}</span>
+        </InlineStack>
       }
     >
       <Layout>
@@ -53,7 +53,7 @@ export default function IntegrationTemplate({app, children}) {
                 <Card.Section title="Useful links">
                   <List>
                     {app.usefulLinks.map((link, key) => (
-                      <Link removeUnderline external url={link.url} key={key}>
+                      <Link removeUnderline target="_blank" url={link.url} key={key}>
                         <List.Item>{link.title}</List.Item>
                       </Link>
                     ))}

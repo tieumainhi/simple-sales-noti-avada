@@ -1,7 +1,7 @@
 import React from 'react';
-import {Modal, TitleBar} from '@shopify/app-bridge-react';
+import { Modal, TitleBar } from '@shopify/app-bridge-react';
 import PropTypes from 'prop-types';
-import {useHistory} from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 /**
  * @returns {JSX.Element}

@@ -1,5 +1,5 @@
-import {handleError} from '@assets/services/errorService';
-import {api, auth} from '@assets/helpers';
+import { handleError } from '@assets/services/errorService';
+import { api, auth } from '@assets/helpers';
 
 export const storeTypes = {
   SET_USER: 'SET_USER',
@@ -10,20 +10,20 @@ export const storeTypes = {
   SET_SUBSCRIPTION: 'SET_SUBSCRIPTION'
 };
 
-export const reducer = (state, {type, payload}) => {
+export const reducer = (state, { type, payload }) => {
   switch (type) {
     case storeTypes.SET_USER:
-      return {...state, user: payload};
+      return { ...state, user: payload };
     case storeTypes.SET_LOADING:
-      return {...state, loading: payload};
+      return { ...state, loading: payload };
     case storeTypes.SET_TOAST:
-      return {...state, toast: payload};
+      return { ...state, toast: payload };
     case storeTypes.CLOSE_TOAST:
-      return {...state, toast: undefined};
+      return { ...state, toast: undefined };
     case storeTypes.SET_SHOP:
-      return {...state, shop: payload};
+      return { ...state, shop: payload };
     case storeTypes.SET_SUBSCRIPTION:
-      return {...state, loading: false, subscription: payload};
+      return { ...state, loading: false, subscription: payload };
     default:
       return state;
   }
@@ -34,7 +34,7 @@ export function setLoading(dispatch, payload = true) {
 }
 
 export function setToast(dispatch, content, error = false) {
-  dispatch(storeTypes.SET_TOAST, {content, error});
+  dispatch(storeTypes.SET_TOAST, { content, error });
 }
 
 export function closeToast(dispatch) {

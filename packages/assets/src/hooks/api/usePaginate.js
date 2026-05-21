@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import useFetchApi from '@assets/hooks/api/useFetchApi';
 
 /**
@@ -32,20 +32,26 @@ export default function usePaginate({
     ...initQueries
   });
 
-  const fetchApiHook = useFetchApi({url, defaultData, initLoad, presentData, initQueries: queries});
-  const {data, fetchApi} = fetchApiHook;
+  const fetchApiHook = useFetchApi({
+    url,
+    defaultData,
+    initLoad,
+    presentData,
+    initQueries: queries
+  });
+  const { data, fetchApi } = fetchApiHook;
 
   const handleFetchApi = async (params = null, keepData = false) => {
-    await fetchApi(url, {...queries, ...params}, keepData);
+    await fetchApi(url, { ...queries, ...params }, keepData);
   };
 
   const onQueryChange = (key, value, isFetch = false) => {
-    setQueries(prev => ({...prev, [key]: value}));
-    if (isFetch) handleFetchApi({[key]: value}).then();
+    setQueries(prev => ({ ...prev, [key]: value }));
+    if (isFetch) handleFetchApi({ [key]: value }).then();
   };
 
   const onQueriesChange = (newQueries, isFetch = false) => {
-    setQueries(prev => ({...prev, ...newQueries}));
+    setQueries(prev => ({ ...prev, ...newQueries }));
     if (isFetch) handleFetchApi(newQueries).then();
   };
 
@@ -60,8 +66,8 @@ export default function usePaginate({
           return ['', '', 1];
       }
     })();
-    await handleFetchApi({page, before, after}, keepPreviousData);
-    setQueries(prev => ({...prev, page}));
+    await handleFetchApi({ page, before, after }, keepPreviousData);
+    setQueries(prev => ({ ...prev, page }));
   };
 
   return {

@@ -106,6 +106,7 @@ async function fetchEmbedTemplateFromCurrentHost(ctx) {
  * @returns {string}
  */
 function withViteDevPreamble(template) {
+  const embedScript = '<script type="module" src="/src/embed.js"></script>';
   const preamble = `<script type="module" src="/@vite/client"></script>
 <script type="module">
   import { injectIntoGlobalHook } from "/@react-refresh";
@@ -117,8 +118,8 @@ function withViteDevPreamble(template) {
   return template.includes('/@react-refresh')
     ? template
     : template.replace(
-        '<script type="module" src="/src/embed.js"></script>',
+        embedScript,
         `${preamble}
-<script type="module" src="/src/embed.js"></script>`
+${embedScript}`
       );
 }

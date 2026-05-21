@@ -2,7 +2,9 @@
   .prose {
     word-break: break-word;
 
-    img, video, iframe {
+    img,
+    video,
+    iframe {
       max-width: 100%;
       height: auto;
       margin-top: 1em;
@@ -29,16 +31,22 @@
       //letter-spacing: -.025em;
     }
 
-    a, a code, a:hover {
+    a,
+    a code,
+    a:hover {
       color: #264a99;
     }
 
-    ol, ul {
+    ol,
+    ul {
       margin-top: 1em;
       margin-bottom: 1em;
     }
 
-    h2+*, h3+*, h4+*, hr+* {
+    h2 + *,
+    h3 + *,
+    h4 + *,
+    hr + * {
       margin-top: 0;
       margin-bottom: 0;
     }

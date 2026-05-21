@@ -1,5 +1,5 @@
 import React from 'react';
-import {BlockStack, Card, Layout, Text} from '@shopify/polaris';
+import { BlockStack, Card, Layout, Text } from '@shopify/polaris';
 
 /**
  * @return {JSX.Element}

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Button, Scrollable} from '@shopify/polaris';
+import { Button, Scrollable } from '@shopify/polaris';
 
 /**
  * @param handleClose

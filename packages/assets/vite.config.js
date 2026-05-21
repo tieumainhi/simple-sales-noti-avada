@@ -52,7 +52,7 @@ if (!isProduction && shopifyApiKey) {
   try {
     const baseUrl = process.env.HOST.replace('https://', '');
 
-    // Update functions .env file 
+    // Update functions .env file.
     // Note: if yarn emulators is running, it will watch the file changes and restart the server, so we need to update the .env file before starting the server
     updateEnvFile('../functions/.env', {
       APP_BASE_URL: baseUrl,
