@@ -7,14 +7,8 @@ import React from 'react';
  * @param {Object} props
  * @return {JSX.Element}
  */
-function TriggersTab({
-  allowShow,
-  setAllowShow,
-  includedPages,
-  setIncludedPages,
-  excludedPages,
-  setExcludedPages
-}) {
+function TriggersTab({ settings, onChange }) {
+  const { allowShow, includedPages, excludedPages } = settings;
   const isSpecific = allowShow === 'specific';
 
   return (
@@ -32,7 +26,7 @@ function TriggersTab({
             { label: 'Specific pages', value: 'specific' }
           ]}
           value={allowShow}
-          onChange={setAllowShow}
+          onChange={value => onChange('allowShow', value)}
         />
 
         {isSpecific && (
@@ -40,7 +34,7 @@ function TriggersTab({
             label="Included pages"
             multiline={4}
             value={includedPages}
-            onChange={setIncludedPages}
+            onChange={value => onChange('includedPages', value)}
             helpText="Page URLs to show the pop-up (separated by new lines)"
           />
         )}
@@ -48,7 +42,7 @@ function TriggersTab({
           label="Excluded pages"
           multiline={4}
           value={excludedPages}
-          onChange={setExcludedPages}
+          onChange={value => onChange('excludedPages', value)}
           helpText="Page URLs NOT to show the pop-up (separated by new lines)"
         />
       </BlockStack>
@@ -59,10 +53,10 @@ function TriggersTab({
 export default React.memo(TriggersTab);
 
 TriggersTab.propTypes = {
-  allowShow: PropTypes.string.isRequired,
-  setAllowShow: PropTypes.func.isRequired,
-  includedPages: PropTypes.string.isRequired,
-  setIncludedPages: PropTypes.func.isRequired,
-  excludedPages: PropTypes.string.isRequired,
-  setExcludedPages: PropTypes.func.isRequired
+  settings: PropTypes.shape({
+    allowShow: PropTypes.string.isRequired,
+    includedPages: PropTypes.string.isRequired,
+    excludedPages: PropTypes.string.isRequired
+  }).isRequired,
+  onChange: PropTypes.func.isRequired
 };

@@ -20,6 +20,19 @@ const defaultSettings = {
   allowShow: 'all'
 };
 
+const getFormSettings = (setting = defaultSettings) => ({
+  position: setting.position || defaultSettings.position,
+  allowShow: setting.allowShow || defaultSettings.allowShow,
+  displayDuration: setting.displayDuration ?? defaultSettings.displayDuration,
+  firstDelay: setting.firstDelay ?? defaultSettings.firstDelay,
+  popsInterval: setting.popsInterval ?? defaultSettings.popsInterval,
+  maxPopsDisplay: setting.maxPopsDisplay ?? defaultSettings.maxPopsDisplay,
+  includedPages: setting.includedUrls || defaultSettings.includedUrls,
+  excludedPages: setting.excludedUrls || defaultSettings.excludedUrls,
+  hideTimeAgo: setting.hideTimeAgo ?? defaultSettings.hideTimeAgo,
+  truncateContent: setting.truncateProductName ?? defaultSettings.truncateProductName
+});
+
 const tabs = [
   {
     id: 'display',
@@ -38,16 +51,7 @@ const tabs = [
  */
 export default function Settings() {
   const [selectedTab, setSelectedTab] = useState(0);
-  const [position, setPosition] = useState(defaultSettings.position);
-  const [allowShow, setAllowShow] = useState(defaultSettings.allowShow);
-  const [displayDuration, setDisplayDuration] = useState(defaultSettings.displayDuration);
-  const [firstDelay, setFirstDelay] = useState(defaultSettings.firstDelay);
-  const [popsInterval, setPopsInterval] = useState(defaultSettings.popsInterval);
-  const [maxPopsDisplay, setMaxPopsDisplay] = useState(defaultSettings.maxPopsDisplay);
-  const [includedPages, setIncludedPages] = useState(defaultSettings.includedUrls);
-  const [excludedPages, setExcludedPages] = useState(defaultSettings.excludedUrls);
-  const [hideTimeAgo, setHideTimeAgo] = useState(defaultSettings.hideTimeAgo);
-  const [truncateContent, setTruncateContent] = useState(defaultSettings.truncateProductName);
+  const [formSettings, setFormSettings] = useState(() => getFormSettings());
 
   const { data: settings, fetched, loading } = useFetchApi({
     url: '/settings',
@@ -60,16 +64,7 @@ export default function Settings() {
   });
 
   const applySettings = useCallback(setting => {
-    setPosition(setting.position || defaultSettings.position);
-    setAllowShow(setting.allowShow || defaultSettings.allowShow);
-    setDisplayDuration(setting.displayDuration ?? defaultSettings.displayDuration);
-    setFirstDelay(setting.firstDelay ?? defaultSettings.firstDelay);
-    setPopsInterval(setting.popsInterval ?? defaultSettings.popsInterval);
-    setMaxPopsDisplay(setting.maxPopsDisplay ?? defaultSettings.maxPopsDisplay);
-    setIncludedPages(setting.includedUrls || defaultSettings.includedUrls);
-    setExcludedPages(setting.excludedUrls || defaultSettings.excludedUrls);
-    setHideTimeAgo(setting.hideTimeAgo ?? defaultSettings.hideTimeAgo);
-    setTruncateContent(setting.truncateProductName ?? defaultSettings.truncateProductName);
+    setFormSettings(getFormSettings(setting));
   }, []);
 
   useEffect(() => {
@@ -78,21 +73,27 @@ export default function Settings() {
     }
   }, [applySettings, fetched, settings]);
 
-  const handleSetSelectedTab = useCallback(
-    selectedTabIndex => setSelectedTab(selectedTabIndex),
-    []
-  );
-  const handleSetPosition = useCallback(setPosition, [setPosition]);
-  const handleSetAllowShow = useCallback(setAllowShow, [setAllowShow]);
-  const handleSetDisplayDuration = useCallback(setDisplayDuration, [setDisplayDuration]);
-  const handleSetFirstDelay = useCallback(setFirstDelay, [setFirstDelay]);
-  const handleSetPopsInterval = useCallback(setPopsInterval, [setPopsInterval]);
-  const handleSetMaxPopsDisplay = useCallback(setMaxPopsDisplay, [setMaxPopsDisplay]);
-  const handleSetIncludedPages = useCallback(setIncludedPages, [setIncludedPages]);
-  const handleSetExcludedPages = useCallback(setExcludedPages, [setExcludedPages]);
-  const handleSetHideTimeAgo = useCallback(setHideTimeAgo, [setHideTimeAgo]);
-  const handleSetTruncateContent = useCallback(setTruncateContent, [setTruncateContent]);
+  const updateFormSetting = useCallback((key, value) => {
+    setFormSettings(currentSettings => ({
+      ...currentSettings,
+      [key]: value
+    }));
+  }, []);
+
   const handleSave = useCallback(async () => {
+    const {
+      position,
+      allowShow,
+      displayDuration,
+      firstDelay,
+      popsInterval,
+      maxPopsDisplay,
+      includedPages,
+      excludedPages,
+      hideTimeAgo,
+      truncateContent
+    } = formSettings;
+
     const response = await handleEdit({
       position,
       allowShow,
@@ -109,20 +110,7 @@ export default function Settings() {
     if (response?.data) {
       applySettings(response.data);
     }
-  }, [
-    allowShow,
-    applySettings,
-    displayDuration,
-    excludedPages,
-    firstDelay,
-    handleEdit,
-    hideTimeAgo,
-    includedPages,
-    maxPopsDisplay,
-    popsInterval,
-    position,
-    truncateContent
-  ]);
+  }, [applySettings, formSettings, handleEdit]);
 
   return (
     <Page
@@ -143,33 +131,11 @@ export default function Settings() {
 
         <Layout.Section>
           <Card padding="20">
-            <Tabs tabs={tabs} selected={selectedTab} onSelect={handleSetSelectedTab}>
+            <Tabs tabs={tabs} selected={selectedTab} onSelect={setSelectedTab}>
               {selectedTab === 0 ? (
-                <DisplayTab
-                  position={position}
-                  setPosition={handleSetPosition}
-                  displayDuration={displayDuration}
-                  setDisplayDuration={handleSetDisplayDuration}
-                  firstDelay={firstDelay}
-                  setFirstDelay={handleSetFirstDelay}
-                  popsInterval={popsInterval}
-                  setPopsInterval={handleSetPopsInterval}
-                  maxPopsDisplay={maxPopsDisplay}
-                  setMaxPopsDisplay={handleSetMaxPopsDisplay}
-                  hideTimeAgo={hideTimeAgo}
-                  setHideTimeAgo={handleSetHideTimeAgo}
-                  truncateContent={truncateContent}
-                  setTruncateContent={handleSetTruncateContent}
-                />
+                <DisplayTab settings={formSettings} onChange={updateFormSetting} />
               ) : (
-                <TriggersTab
-                  allowShow={allowShow}
-                  setAllowShow={handleSetAllowShow}
-                  includedPages={includedPages}
-                  setIncludedPages={handleSetIncludedPages}
-                  excludedPages={excludedPages}
-                  setExcludedPages={handleSetExcludedPages}
-                />
+                <TriggersTab settings={formSettings} onChange={updateFormSetting} />
               )}
             </Tabs>
           </Card>

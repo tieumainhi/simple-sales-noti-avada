@@ -22,22 +22,17 @@ const positionOptions = [
  * @param {Object} props
  * @return {JSX.Element}
  */
-const DisplayTab = ({
-  position,
-  setPosition,
-  displayDuration,
-  setDisplayDuration,
-  firstDelay,
-  setFirstDelay,
-  popsInterval,
-  setPopsInterval,
-  maxPopsDisplay,
-  setMaxPopsDisplay,
-  hideTimeAgo,
-  setHideTimeAgo,
-  truncateContent,
-  setTruncateContent
-}) => {
+const DisplayTab = ({ settings, onChange }) => {
+  const {
+    position,
+    displayDuration,
+    firstDelay,
+    popsInterval,
+    maxPopsDisplay,
+    hideTimeAgo,
+    truncateContent
+  } = settings;
+
   return (
     <LegacyCard.Section>
       <BlockStack gap="400">
@@ -61,7 +56,7 @@ const DisplayTab = ({
                     .filter(Boolean)
                     .join(' ')}
                   key={option.value}
-                  onClick={() => setPosition(option.value)}
+                  onClick={() => onChange('position', option.value)}
                   type="button"
                 />
               ))}
@@ -71,12 +66,16 @@ const DisplayTab = ({
             The display position of the pop on your website.
           </Text>
         </BlockStack>
-        <Checkbox label="Hide time ago" checked={hideTimeAgo} onChange={setHideTimeAgo} />
+        <Checkbox
+          label="Hide time ago"
+          checked={hideTimeAgo}
+          onChange={value => onChange('hideTimeAgo', value)}
+        />
         <Checkbox
           label="Truncate content text"
           checked={truncateContent}
           helpText="If your product name is long for one line, it will be truncated to 'Product na...'"
-          onChange={setTruncateContent}
+          onChange={value => onChange('truncateContent', value)}
         />
         <Text as="h2" variant="headingMd" tone="subdued">
           TIMING
@@ -98,7 +97,7 @@ const DisplayTab = ({
                 />
               }
               value={displayDuration}
-              onChange={setDisplayDuration}
+              onChange={value => onChange('displayDuration', value)}
               helpText="How long each pop will display on your page."
             />
             <RangeSlider
@@ -115,7 +114,7 @@ const DisplayTab = ({
                 />
               }
               value={firstDelay}
-              onChange={setFirstDelay}
+              onChange={value => onChange('firstDelay', value)}
               helpText="The delay time before the first notification."
             />
           </BlockStack>
@@ -134,7 +133,7 @@ const DisplayTab = ({
                 />
               }
               value={popsInterval}
-              onChange={setPopsInterval}
+              onChange={value => onChange('popsInterval', value)}
               helpText="The time interval between two popup notifications."
             />
             <RangeSlider
@@ -151,7 +150,7 @@ const DisplayTab = ({
                 />
               }
               value={maxPopsDisplay}
-              onChange={setMaxPopsDisplay}
+              onChange={value => onChange('maxPopsDisplay', value)}
               helpText="The maximum number of popups are allowed to show after page loading. Maximum number is 80."
             />
           </BlockStack>
@@ -164,18 +163,14 @@ const DisplayTab = ({
 export default React.memo(DisplayTab);
 
 DisplayTab.propTypes = {
-  position: PropTypes.string.isRequired,
-  setPosition: PropTypes.func.isRequired,
-  displayDuration: PropTypes.number.isRequired,
-  setDisplayDuration: PropTypes.func.isRequired,
-  firstDelay: PropTypes.number.isRequired,
-  setFirstDelay: PropTypes.func.isRequired,
-  popsInterval: PropTypes.number.isRequired,
-  setPopsInterval: PropTypes.func.isRequired,
-  maxPopsDisplay: PropTypes.number.isRequired,
-  setMaxPopsDisplay: PropTypes.func.isRequired,
-  hideTimeAgo: PropTypes.bool.isRequired,
-  setHideTimeAgo: PropTypes.func.isRequired,
-  truncateContent: PropTypes.bool.isRequired,
-  setTruncateContent: PropTypes.func.isRequired
+  settings: PropTypes.shape({
+    position: PropTypes.string.isRequired,
+    displayDuration: PropTypes.number.isRequired,
+    firstDelay: PropTypes.number.isRequired,
+    popsInterval: PropTypes.number.isRequired,
+    maxPopsDisplay: PropTypes.number.isRequired,
+    hideTimeAgo: PropTypes.bool.isRequired,
+    truncateContent: PropTypes.bool.isRequired
+  }).isRequired,
+  onChange: PropTypes.func.isRequired
 };
