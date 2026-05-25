@@ -47,7 +47,8 @@ export function findTargetElement(position) {
       document.querySelector('[data-add-to-cart]') ||
       document.querySelector('.product-form__submit'),
     'before-add-to-cart': () =>
-      document.querySelector('form[action*="/cart/add"]') || document.querySelector('[data-product-form]'),
+      document.querySelector('form[action*="/cart/add"]') ||
+      document.querySelector('[data-product-form]'),
     'product-description': () =>
       document.querySelector('.product-single__description') ||
       document.querySelector('[data-product-description]') ||

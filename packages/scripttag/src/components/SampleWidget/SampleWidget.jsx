@@ -12,7 +12,7 @@
  * - Conditional rendering
  */
 
-import {useState, useCallback} from 'preact/hooks';
+import { useState, useCallback } from 'preact/hooks';
 import styles from './SampleWidget.module.scss';
 
 /**
@@ -21,11 +21,11 @@ import styles from './SampleWidget.module.scss';
  * @param {Object} props
  * @param {Object} props.data - Widget data from API or window
  */
-export function SampleWidget({data}) {
+export function SampleWidget({ data }) {
   const [isVisible, setIsVisible] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const {settings = {}, content = {}} = data;
+  const { settings = {}, content = {} } = data;
 
   const handleClose = useCallback(() => {
     setIsVisible(false);

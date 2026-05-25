@@ -5,12 +5,17 @@
  * Uses XMLHttpRequest for maximum browser compatibility.
  */
 
-import {makeRequest} from '../helpers/api';
+import { makeRequest } from '../helpers';
+
+const SCRIPT_SRC_PATH = '/scripttag/avada-storefront.min.js';
+const DEFAULT_NOTIFICATIONS_LIMIT = 20;
 
 export default class ApiManager {
   constructor() {
-    this.shopDomain = window.Shopify?.shop || '';
-    this.apiUrl = process.env.API_URL || '';
+    const currentScriptUrl = getCurrentScriptUrl();
+
+    this.shopDomain = window.Shopify?.shop || getShopDomainFromScriptUrl(currentScriptUrl) || '';
+    this.apiUrl = (process.env.API_URL || getOriginFromUrl(currentScriptUrl) || '').replace(/\/$/, '');
   }
 
   /**
@@ -30,7 +35,12 @@ export default class ApiManager {
     }
 
     try {
-      const url = `${this.apiUrl}/clientApi/widget?shopifyDomain=${this.shopDomain}`;
+      // Endpoint exposed by backend: /clientApi/setting-notifications
+      const url = `${
+        this.apiUrl
+      }/clientApi/setting-notifications?shopifyDomain=${encodeURIComponent(
+        this.shopDomain
+      )}&limit=${DEFAULT_NOTIFICATIONS_LIMIT}`;
       const response = await makeRequest(url);
       return response;
     } catch (error) {
@@ -54,11 +64,43 @@ export default class ApiManager {
           eventType,
           ...eventData
         },
-        {contentType: 'application/json'}
+        { contentType: 'application/json' }
       );
     } catch (error) {
       // Silent fail for tracking
       console.warn('[Avada] Tracking failed:', error);
     }
+  }
+}
+
+function getCurrentScriptUrl() {
+  if (document.currentScript?.src) {
+    return document.currentScript.src;
+  }
+
+  const scripts = document.getElementsByTagName('script');
+  for (let index = scripts.length - 1; index >= 0; index -= 1) {
+    const src = scripts[index].src || '';
+    if (src.includes(SCRIPT_SRC_PATH)) {
+      return src;
+    }
+  }
+
+  return '';
+}
+
+function getOriginFromUrl(url) {
+  try {
+    return url ? new URL(url).origin : '';
+  } catch (e) {
+    return '';
+  }
+}
+
+function getShopDomainFromScriptUrl(url) {
+  try {
+    return url ? new URL(url).searchParams.get('shop') : '';
+  } catch (e) {
+    return '';
   }
 }

@@ -7,6 +7,7 @@ import createErrorHandler from '@functions/middleware/errorHandler';
 import { getShopByShopifyDomain } from '@functions/repositories/shopRepository';
 import apiRouter from '@functions/routes/api';
 import * as errorService from '@functions/services/errorService';
+import { registerStorefrontScriptTag } from '@functions/services/scriptTagRegistrationService';
 import { registerOrdersCreateWebhook } from '@functions/services/webhookRegistrationService';
 import App from 'koa';
 import render from 'koa-ejs';
@@ -25,7 +26,7 @@ render(api, {
 });
 api.use(createErrorHandler());
 
-const registeredWebhookCache = new Set();
+const registeredInstallAssetsCache = new Set();
 
 const verifyEmbedOptions = {
   returnHeader: true,
@@ -41,16 +42,20 @@ const verifyEmbedOptions = {
     try {
       const shopifyDomain = ctx.state.shopify.shop;
       const cacheKey = `${shopifyDomain}:${appConfig.baseUrl}`;
-      if (registeredWebhookCache.has(cacheKey)) return;
+      if (registeredInstallAssetsCache.has(cacheKey)) return;
 
       const shop = await getShopByShopifyDomain(shopifyDomain);
       if (!shop?.id) return;
 
-      const result = await registerOrdersCreateWebhook({ shop });
-      registeredWebhookCache.add(cacheKey);
-      console.log('After login dev webhook registration result:', result);
+      const webhook = await registerOrdersCreateWebhook({ shop });
+      const scriptTag = await registerStorefrontScriptTag({ shop });
+      registeredInstallAssetsCache.add(cacheKey);
+      console.log('After login dev install asset registration result:', {
+        webhook,
+        scriptTag
+      });
     } catch (e) {
-      console.error('Cannot register dev webhook after login:', e);
+      console.error('Cannot register dev install assets after login:', e);
     }
   }
 };

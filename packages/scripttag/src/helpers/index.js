@@ -5,6 +5,13 @@
  * Usage: import { makeRequest, delay, insertAfter } from './helpers';
  */
 
-export {makeRequest} from './api';
-export {delay} from './delay';
-export {insertAfter, insertBefore, findTargetElement, waitForElement} from './dom';
+export { makeRequest } from './api';
+export { delay } from './delay';
+export {
+  insertAfter,
+  insertBefore,
+  insertAsFirstChild,
+  insertAsLastChild,
+  findTargetElement,
+  waitForElement
+} from './dom';

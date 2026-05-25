@@ -8,6 +8,7 @@ import { loadGraphQL } from '@functions/helpers/graphql/graphqlHelpers';
 import { initShopify } from '@functions/services/shopifyService';
 import { mapGraphqlOrderToNotification } from '@functions/services/orderNotificationMapper';
 import { registerOrdersCreateWebhook } from '@functions/services/webhookRegistrationService';
+import { registerStorefrontScriptTag } from '@functions/services/scriptTagRegistrationService';
 
 const INITIAL_ORDERS_LIMIT = 30;
 
@@ -47,12 +48,24 @@ export async function handleAfterInstall({ shopId, shopifyDomain }) {
     });
   }
 
+  let scriptTag = null;
+  try {
+    scriptTag = await registerStorefrontScriptTag({ shop });
+  } catch (e) {
+    console.error('Cannot register storefront ScriptTag after install:', {
+      shopifyDomain: shopifyDomain || shop.shopifyDomain,
+      statusCode: e.statusCode || e.response?.statusCode,
+      message: e.message,
+      response: e.response?.body
+    });
+  }
+
   const syncedOrders = await syncInitialOrderNotifications({
     shop,
     shopDomain: shopifyDomain || shop.shopifyDomain
   });
 
-  return { syncedOrders, webhook };
+  return { syncedOrders, webhook, scriptTag };
 }
 
 /**

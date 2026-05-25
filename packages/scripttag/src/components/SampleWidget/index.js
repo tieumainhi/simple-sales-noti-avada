@@ -1,1 +1,1 @@
-export {SampleWidget, default} from './SampleWidget.jsx';
+export { SampleWidget, default } from './SampleWidget.jsx';
