@@ -2,12 +2,12 @@ import { verifyEmbedRequest } from '@avada/core';
 import appConfig from '@functions/config/app';
 import shopifyConfig from '@functions/config/shopify';
 import shopifyOptionalScopes from '@functions/config/shopifyOptionalScopes';
-import { publishTopicAsync } from '@functions/helpers/pubsub/publishTopic';
 import { getAppHostName } from '@functions/helpers/requestUrl';
 import createErrorHandler from '@functions/middleware/errorHandler';
 import { getShopByShopifyDomain } from '@functions/repositories/shopRepository';
 import apiRouter from '@functions/routes/api';
 import * as errorService from '@functions/services/errorService';
+import { registerOrdersCreateWebhook } from '@functions/services/webhookRegistrationService';
 import App from 'koa';
 import render from 'koa-ejs';
 import path from 'path';
@@ -25,6 +25,8 @@ render(api, {
 });
 api.use(createErrorHandler());
 
+const registeredWebhookCache = new Set();
+
 const verifyEmbedOptions = {
   returnHeader: true,
   apiKey: shopifyConfig.apiKey,
@@ -34,36 +36,22 @@ const verifyEmbedOptions = {
   optionalScopes: shopifyOptionalScopes,
   accessTokenKey: shopifyConfig.accessTokenKey,
   afterLogin: async ctx => {
-    try {
-      // supspense shop data after login, to make sure the shop data is ready when the app is loaded in Shopify Admin
-      const shopifyDomain = ctx.state.shopify.shop;
-      console.log('After login for' + shopifyDomain);
-    } catch (e) {
-      console.error(e);
-    }
-  },
-  afterInstall: async ctx => {
-    try {
-      const { shopifyDomain } = ctx.state.shopify.shop;
-      console.log('After install for' + shopifyDomain);
-      const shop = await getShopByShopifyDomain(shopifyDomain);
+    if (process.env.NODE_ENV === 'production') return;
 
-      // get shop then publish background task to handle after instal
-      publishTopicAsync('backgroundHandling', {
-        type: 'afterInstall',
-        shopId: shop.id,
-        shopifyDomain
-      });
+    try {
+      const shopifyDomain = ctx.state.shopify.shop;
+      const cacheKey = `${shopifyDomain}:${appConfig.baseUrl}`;
+      if (registeredWebhookCache.has(cacheKey)) return;
+
+      const shop = await getShopByShopifyDomain(shopifyDomain);
+      if (!shop?.id) return;
+
+      const result = await registerOrdersCreateWebhook({ shop });
+      registeredWebhookCache.add(cacheKey);
+      console.log('After login dev webhook registration result:', result);
     } catch (e) {
-      console.error('afterInstall error:', e);
+      console.error('Cannot register dev webhook after login:', e);
     }
-  },
-  initialPlan: {
-    id: 'free',
-    name: 'Free',
-    price: 0,
-    trialDays: 0,
-    features: {}
   }
 };
 

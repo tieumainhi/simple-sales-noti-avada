@@ -1,29 +1,42 @@
-import { z } from 'zod';
+import * as yup from 'yup';
 import { validate } from './validate';
 
-const createSchema = z.object({
-  name: z
-    .string()
-    .trim()
+const statusSchema = yup.mixed().oneOf(['active', 'inactive', 'cancelled']);
+const trimmedString = yup
+  .string()
+  .transform((value, originalValue) =>
+    typeof originalValue === 'string' ? originalValue.trim() : originalValue
+  );
+
+const createSchema = yup.object({
+  name: trimmedString
     .min(2, 'Name must be 2-100 chars')
-    .max(100),
-  amount: z.number({ message: 'Amount is required' }).min(0, 'Amount must be >= 0'),
-  status: z.enum(['active', 'inactive', 'cancelled']).optional()
+    .max(100)
+    .required('Name is required'),
+  amount: yup
+    .number()
+    .strict(true)
+    .required('Amount is required')
+    .min(0, 'Amount must be >= 0'),
+  status: statusSchema.optional()
 });
 
-const updateSchema = z.object({
-  id: z.string({ message: 'ID is required' }).min(1),
-  name: z
+const updateSchema = yup.object({
+  id: yup
     .string()
-    .trim()
+    .strict(true)
+    .required('ID is required')
+    .min(1),
+  name: trimmedString
     .min(2)
     .max(100)
     .optional(),
-  amount: z
+  amount: yup
     .number()
+    .strict(true)
     .min(0)
     .optional(),
-  status: z.enum(['active', 'inactive', 'cancelled']).optional()
+  status: statusSchema.optional()
 });
 
 export const validateCreateSubscription = validate(createSchema);

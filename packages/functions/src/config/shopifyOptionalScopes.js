@@ -1,3 +1,3 @@
-const optionalScopes = ['read_reports', 'read_analytics', 'read_customer_events'];
+const optionalScopes = ['read_orders'];
 
 export default optionalScopes;

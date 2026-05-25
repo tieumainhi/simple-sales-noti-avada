@@ -6,22 +6,6 @@ export const navigationLinks = [
   {
     label: 'Settings',
     destination: '/settings'
-  },
-  {
-    label: 'Samples',
-    destination: '/samples'
-  },
-  {
-    label: 'Optional Scopes',
-    destination: '/optional-scopes'
-  },
-  {
-    label: 'Tables',
-    destination: '/tables'
-  },
-  {
-    label: 'Fullscreen Page A',
-    destination: '/fullscreen-page-a'
   }
 ].map(item => ({
   ...item,

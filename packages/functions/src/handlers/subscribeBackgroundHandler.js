@@ -14,14 +14,11 @@
 export default async function subscribeBackgroundHandling(event) {
   try {
     const data = event.data.message.json;
-    const { type, shopId } = data;
+
+    // get type and shopId from the message and handle accordingly
+    const { type } = data;
 
     switch (type) {
-      case 'afterInstall':
-        // TODO: Add your post-installation logic here
-        // Example: sync initial data, register webhooks, etc.
-        console.log('Processing afterInstall for shop:', shopId);
-        break;
       default:
         console.log('Unknown background task type:', type);
     }

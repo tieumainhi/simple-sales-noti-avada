@@ -17,6 +17,9 @@ render(api, {
   viewExt: 'html'
 });
 api.use(createErrorHandler());
+
+// Verify that the request is from Shopify, and has a session by checking
+// x-auth-token: <firebase-id-token>
 api.use(verifyRequest());
 
 const router = apiRouter();

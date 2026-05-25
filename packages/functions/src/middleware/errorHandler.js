@@ -8,7 +8,7 @@ export default function createErrorHandler() {
     try {
       await next();
     } catch (err) {
-      if (ctx.get('accept') === 'application/json') {
+      if (ctx.path.startsWith('/api') || ctx.get('accept').includes('application/json')) {
         ctx.status = err.status || 500;
         if (err.errors) {
           ctx.body = { errors: err.errors };

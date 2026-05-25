@@ -15,6 +15,15 @@ export default async function verifyWebhook(ctx, next) {
   const secret = await getSecret(ctx);
   const hmac = getHmac(ctx);
 
+  if (!rawBody || !hmac) {
+    ctx.status = 401;
+    ctx.body = {
+      success: false,
+      message: 'Missing webhook raw body or HMAC header'
+    };
+    return;
+  }
+
   const generatedHash = crypto
     .createHmac('sha256', secret)
     .update(rawBody)
@@ -22,6 +31,7 @@ export default async function verifyWebhook(ctx, next) {
 
   if (hmac !== generatedHash) {
     console.error('Cannot verify webhook because of wrong shared secret');
+    ctx.status = 401;
     ctx.body = {
       success: false,
       message: 'Cannot verify webhook because of wrong shared secret'

@@ -1,3 +1,9 @@
+
+<!-- packages/assets/package.json (line 6): Không truyền file HTML nào cả. => chỉ gọi vite
+ Khi chạy dev server, Vite mặc định lấy index.html ở root project hiện tại, tức là: packages/assets/index.html-->
+
+ <!-- Còn production build thì project có cấu hình rõ trong 
+  const templateOutFile = isEmbed ? 'embed-template.html' : 'standalone.html'; -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -283,6 +289,11 @@
     }
   }, 7000);
 </script>
+
+<!-- nhúng code react -->
 <script type="module" src="/src/embed.js"></script>
 </body>
 </html>
+
+
+<!-- file này để vite build khi là embed app ở dev (mặc định tìm file index.html build nếu vite.config không config gì) -->

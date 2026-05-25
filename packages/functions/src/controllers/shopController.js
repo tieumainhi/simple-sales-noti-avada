@@ -1,6 +1,5 @@
-import { getCurrentShop } from '../helpers/auth';
 import { getShopInfoByShopId } from '@functions/repositories/shopInfoRepository';
-import { getShopById } from '@functions/repositories/shopRepository';
+import { getShopById, getShopByShopifyDomain } from '@functions/repositories/shopRepository';
 
 /**
  * @param ctx
@@ -8,7 +7,20 @@ import { getShopById } from '@functions/repositories/shopRepository';
  */
 export async function getUserShops(ctx) {
   try {
-    const shopId = getCurrentShop(ctx);
+    let shopId = ctx.state?.user?.shopID;
+    if (!shopId && ctx.state?.shopify?.shop) {
+      const shopByDomain = await getShopByShopifyDomain(ctx.state.shopify.shop);
+      shopId = shopByDomain?.id;
+      console.log('Fallback shop lookup by domain:', {
+        shopifyDomain: ctx.state.shopify.shop,
+        shopId
+      });
+    }
+
+    if (!shopId) {
+      throw new Error('Missing shopId in authenticated request');
+    }
+
     console.log('Get user shops', shopId);
     const [shop, shopInfo] = await Promise.all([getShopById(shopId), getShopInfoByShopId(shopId)]);
 
@@ -16,7 +28,8 @@ export async function getUserShops(ctx) {
 
     ctx.body = { shop, shopInfo };
   } catch (e) {
-    console.error(e);
-    ctx.body = { shop: null, shopInfo: null };
+    console.error('Get user shops error:', e);
+    ctx.status = 500;
+    ctx.body = { shop: null, shopInfo: null, error: e.message };
   }
 }

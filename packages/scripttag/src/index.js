@@ -8,10 +8,10 @@
  * Output: static/scripttag/avada-storefront.min.js
  */
 
-import {render} from 'preact';
+import { render } from 'preact';
 import SampleWidget from './components/SampleWidget/SampleWidget';
 import ApiManager from './managers/ApiManager';
-import {insertAfter, findTargetElement} from './helpers/dom';
+import { insertAfter, findTargetElement } from './helpers/dom';
 
 /**
  * Initialize the widget

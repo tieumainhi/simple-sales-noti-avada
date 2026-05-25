@@ -26,15 +26,34 @@ export async function getNotifications(shopId, query = {}) {
  * @param {Object} data
  * @returns {Promise<string>}
  */
-export async function addNotification(shopId, data) {
+
+export async function createNotification(shopId, data) {
   const created = await collection.add({
     ...data,
     shopId,
+    shopDomain: data.shopDomain || data.shopifyDomain || '',
     timestamp: data.timestamp ? new Date(data.timestamp) : new Date(),
     createdAt: new Date()
   });
 
   return created.id;
+}
+
+/**
+ * @param {string} shopId
+ * @param {string|number} shopifyOrderId
+ * @returns {Promise<boolean>}
+ */
+export async function hasNotificationForOrder(shopId, shopifyOrderId) {
+  if (!shopifyOrderId) return false;
+
+  const docs = await collection
+    .where('shopId', '==', shopId)
+    .where('shopifyOrderId', '==', String(shopifyOrderId))
+    .limit(1)
+    .get();
+
+  return !docs.empty;
 }
 
 /**

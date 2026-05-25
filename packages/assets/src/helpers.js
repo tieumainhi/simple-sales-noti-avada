@@ -138,7 +138,9 @@ function createApi() {
         throw error;
       }
       if (!response.ok) {
-        const error = new Error(data?.message || `Request failed with status ${response.status}`);
+        const error = new Error(
+          data?.message || data?.error || `Request failed with status ${response.status}`
+        );
         error.status = response.status;
         error.data = data;
         throw error;

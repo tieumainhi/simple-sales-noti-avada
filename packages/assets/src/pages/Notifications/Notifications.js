@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Card, InlineStack, Layout, Page, ResourceList, Text } from '@shopify/polaris';
 import NotificationPopup from '@assets/components/NotificationPopup/NotificationPopup';
 import useFetchApi from '@assets/hooks/api/useFetchApi';
-import { formatDateOnly } from '@assets/helpers/utils/formatFullTime';
+import { formatNotificationDate, formatTimeAgo } from '@assets/helpers/utils/formatFullTime';
 
 const pageLimit = 20;
 const resourceName = { singular: 'notification', plural: 'notifications' };
@@ -120,46 +120,4 @@ function renderNotification(item) {
       </InlineStack>
     </ResourceList.Item>
   );
-}
-
-/**
- * @param {Date|string|Object} timestamp
- * @returns {Date|null}
- */
-function toDate(timestamp) {
-  if (!timestamp) return null;
-  if (timestamp._seconds) return new Date(timestamp._seconds * 1000);
-
-  const date = new Date(timestamp);
-  return Number.isNaN(date.getTime()) ? null : date;
-}
-
-/**
- * @param {Date|string|Object} timestamp
- * @returns {string}
- */
-function formatNotificationDate(timestamp) {
-  const date = toDate(timestamp);
-  return date ? `From ${formatDateOnly(date)}` : '';
-}
-
-/**
- * @param {Date|string|Object} timestamp
- * @returns {string}
- */
-function formatTimeAgo(timestamp) {
-  const date = toDate(timestamp);
-  if (!date) return 'a day ago';
-
-  const diffSeconds = Math.max(0, Math.floor((Date.now() - date.getTime()) / 1000));
-  if (diffSeconds < 60) return 'just now';
-
-  const diffMinutes = Math.floor(diffSeconds / 60);
-  if (diffMinutes < 60) return `${diffMinutes} minute${diffMinutes > 1 ? 's' : ''} ago`;
-
-  const diffHours = Math.floor(diffMinutes / 60);
-  if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
-
-  const diffDays = Math.floor(diffHours / 24);
-  return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
 }

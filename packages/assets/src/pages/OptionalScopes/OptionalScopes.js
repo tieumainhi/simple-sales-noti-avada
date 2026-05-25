@@ -3,7 +3,7 @@ import { Button, Layout, Page } from '@shopify/polaris';
 
 const OptionalScopes = () => {
   const handleGrantExtraScopes = () => {
-    shopify.scopes.request(['read_translations', 'read_customers']).then(response => {
+    shopify.scopes.request(['read_orders']).then(response => {
       if (response.result === 'granted-all') {
         window.location.reload();
       }

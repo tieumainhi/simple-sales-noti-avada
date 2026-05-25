@@ -1,11 +1,11 @@
 /**
- * Generic Zod validation middleware factory for Koa.
+ * Generic Yup validation middleware factory for Koa.
  *
  * @example
- * import {z} from 'zod';
+ * import * as yup from 'yup';
  * import {validate} from './validate';
  *
- * const createSchema = z.object({ name: z.string().min(2).max(100) });
+ * const createSchema = yup.object({ name: yup.string().min(2).max(100) });
  * export const validateCreate = validate(createSchema);
  *
  * // routes/api.js
@@ -13,33 +13,38 @@
  */
 
 /**
- * Format Zod errors into a readable string
- * @param {z.ZodError} error
+ * Format Yup errors into a readable string
+ * @param {yup.ValidationError} error
  * @returns {string}
  */
-function formatZodError(error) {
-  return error.issues.map(issue => issue.message).join(', ');
+function formatYupError(error) {
+  return error.inner.length ? error.inner.map(issue => issue.message).join(', ') : error.message;
 }
 
 /**
- * Create Koa validation middleware from a Zod schema
- * @param {z.ZodSchema} schema - Zod schema to validate against
+ * Create Koa validation middleware from a Yup schema
+ * @param {yup.Schema} schema - Yup schema to validate against
  * @returns {Function} Koa middleware
  */
 export function validate(schema) {
   return async function validateBody(ctx, next) {
     const body = ctx.req?.body ?? ctx.request?.body ?? {};
-    const result = schema.safeParse(body);
+    let data;
 
-    if (!result.success) {
+    try {
+      data = await schema.validate(body, {
+        abortEarly: true, // Stop validation on first error
+        stripUnknown: true
+      });
+    } catch (error) {
       ctx.status = 400;
-      ctx.body = { success: false, error: formatZodError(result.error) };
+      ctx.body = { success: false, error: formatYupError(error) };
       return;
     }
 
     // Replace body with parsed/transformed data (trimmed, stripped unknown fields)
-    ctx.req.body = result.data;
-    ctx.request.body = result.data;
+    ctx.req.body = data;
+    ctx.request.body = data;
 
     return next();
   };

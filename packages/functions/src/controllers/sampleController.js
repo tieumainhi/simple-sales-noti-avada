@@ -30,7 +30,7 @@ export async function exampleAction(ctx) {
 export async function getShopifyGraphql(ctx) {
   try {
     const shopData = getCurrentShopData(ctx);
-    const shopify = await initShopify(shopData);
+    const shopify = initShopify(shopData);
     const shopQuery = loadGraphQL('/shop.graphql');
     const shopGraphql = await shopify.graphql(shopQuery);
 

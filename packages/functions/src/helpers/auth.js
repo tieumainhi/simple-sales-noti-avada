@@ -1,4 +1,5 @@
 import { formatDateFields } from '@avada/firestore-utils';
+// avadar core handle in `node_modules/@avada/core/build/helpers/verifyEmbedRequest/verifyToken.js.`
 
 /**
  * Get current shop id from Koa context
@@ -34,6 +35,7 @@ export function getCurrentShopData(ctx) {
   return formatDateFields(ctx.state.user.shopData);
 }
 
+// node_modules/@avada/core/build/helpers/verifyEmbedRequest/checkIfHasSession.js (line 82)
 /**
  * Get current shopify session from Koa context
  *
