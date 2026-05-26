@@ -17,6 +17,7 @@ export async function registerStorefrontScriptTag({ shop }) {
     return { id: null, src: '', action: 'skipped' };
   }
 
+  // Check if the ScriptTag with the exact src already exists
   const scriptTags = await shopify.scriptTag.list();
   const exactScriptTag = scriptTags.find(scriptTag => scriptTag.src === src);
 
@@ -28,6 +29,9 @@ export async function registerStorefrontScriptTag({ shop }) {
     return { id: exactScriptTag.id, src, action: 'exists' };
   }
 
+  // If not, check if there is any ScriptTag with the same path but different query (e.g. different shop param),
+  // which can happen when shop domain changes or app base url changes.
+  // In this case we will update the first found ScriptTag to use the new src, and delete the rest duplicates if exist.
   const sameAppScriptTags = scriptTags.filter(scriptTag =>
     scriptTag.src?.includes(SCRIPT_TAG_SRC_PATH)
   );

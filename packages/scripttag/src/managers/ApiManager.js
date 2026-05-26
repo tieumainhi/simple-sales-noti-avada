@@ -15,7 +15,10 @@ export default class ApiManager {
     const currentScriptUrl = getCurrentScriptUrl();
 
     this.shopDomain = window.Shopify?.shop || getShopDomainFromScriptUrl(currentScriptUrl) || '';
-    this.apiUrl = (process.env.API_URL || getOriginFromUrl(currentScriptUrl) || '').replace(/\/$/, '');
+    this.apiUrl = (process.env.API_URL || getOriginFromUrl(currentScriptUrl) || '').replace(
+      /\/$/,
+      ''
+    );
   }
 
   /**

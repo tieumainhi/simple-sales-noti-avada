@@ -39,6 +39,8 @@ const verifyEmbedOptions = {
   afterLogin: async ctx => {
     if (process.env.NODE_ENV === 'production') return;
 
+    // Đảm bảo webhook + ScriptTag dev đang trỏ đúng tunnel hiện tại, đỡ phải unistall app
+    // tránh tránh tình trạng tunnel đổi nhưng webhook/scriptTag chưa được cập nhật.
     try {
       const shopifyDomain = ctx.state.shopify.shop;
       const cacheKey = `${shopifyDomain}:${appConfig.baseUrl}`;

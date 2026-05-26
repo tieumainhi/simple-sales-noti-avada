@@ -7,6 +7,7 @@
 
 export { makeRequest } from './api';
 export { delay } from './delay';
+export { shouldShowOnCurrentPage } from './displayRules';
 export {
   insertAfter,
   insertBefore,
@@ -15,3 +16,4 @@ export {
   findTargetElement,
   waitForElement
 } from './dom';
+export { toNumber, toSeconds } from './number';

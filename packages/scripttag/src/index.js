@@ -9,9 +9,10 @@
  */
 
 import { render } from 'preact';
+import React from 'preact';
 import NotificationWidget from './components/NotificationWidget/NotificationWidget.js';
 import ApiManager from './managers/ApiManager';
-import { delay, insertAsLastChild } from './helpers';
+import { delay, insertAsLastChild, shouldShowOnCurrentPage, toNumber, toSeconds } from './helpers';
 
 const CONTAINER_ID = 'avada-sales-pop';
 let isRunning = false;
@@ -25,6 +26,8 @@ async function init() {
 
   try {
     const apiManager = new ApiManager();
+
+    // Fetch widget data from the API
     const response = await apiManager.getWidgetData();
     const { setting, notifications } = response?.data || {};
 
@@ -38,7 +41,10 @@ async function init() {
       return;
     }
 
+    // create <div id="avada-sales-pop" class="avada-sales-pop-container"></div>
     const container = createContainer();
+
+    // limit the number of notifications to display based on settings and available data
     const maxPops = Math.min(
       toNumber(setting.maxPopsDisplay, notifications.length),
       notifications.length
@@ -47,12 +53,15 @@ async function init() {
     await delay(toSeconds(setting.firstDelay, 0));
 
     for (let index = 0; index < maxPops; index += 1) {
+      // render component NotificationWidget to div#avada-sales-pop
       render(
         <NotificationWidget notification={notifications[index]} setting={setting} />,
         container
       );
 
       await delay(toSeconds(setting.displayDuration, 5));
+
+      // hide component NotificationWidget
       render(null, container);
 
       if (index < maxPops - 1) {
@@ -86,49 +95,6 @@ function createContainer() {
   return container;
 }
 
-function shouldShowOnCurrentPage(setting) {
-  if (setting.enabled === false || setting.active === false) return false;
-
-  const currentUrl = window.location.href;
-  const excludedRules = parseUrlRules(setting.excludedUrls);
-  if (excludedRules.some(rule => matchesUrlRule(currentUrl, rule))) {
-    return false;
-  }
-
-  if (setting.allowShow !== 'specific') return true;
-
-  const includedRules = parseUrlRules(setting.includedUrls);
-  return includedRules.some(rule => matchesUrlRule(currentUrl, rule));
-}
-
-function parseUrlRules(value = '') {
-  return String(value)
-    .split(/\r?\n|,/)
-    .map(rule => rule.trim())
-    .filter(Boolean);
-}
-
-function matchesUrlRule(currentUrl, rule) {
-  const normalizedUrl = currentUrl.replace(/\/$/, '');
-  const normalizedRule = rule.replace(/\/$/, '');
-
-  if (normalizedRule === '*') return true;
-  if (normalizedRule.startsWith('/')) {
-    return window.location.pathname.replace(/\/$/, '').includes(normalizedRule);
-  }
-
-  return normalizedUrl.includes(normalizedRule);
-}
-
-function toSeconds(value, fallback) {
-  return toNumber(value, fallback) * 1000;
-}
-
-function toNumber(value, fallback) {
-  const parsed = Number(value);
-  return Number.isFinite(parsed) && parsed >= 0 ? parsed : fallback;
-}
-
 // Initialize on DOM ready
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);
@@ -137,4 +103,5 @@ if (document.readyState === 'loading') {
 }
 
 // Export for manual re-initialization (e.g., after AJAX navigation)
+// Usage: window.avadaWidgetInit(); call manually from global window to re-render the widget with updated data (test/debug purpose)
 window.avadaWidgetInit = init;

@@ -4,6 +4,7 @@ import {
 } from '@functions/repositories/notificationsRepository';
 import { getShopByShopifyDomain } from '@functions/repositories/shopRepository';
 import { mapWebhookOrderToNotification } from '@functions/services/orderNotificationMapper';
+import { getProductImageFromLineItem } from '@functions/services/productImageService';
 
 /**
  * Handle app/uninstalled webhook
@@ -67,6 +68,13 @@ export async function ordersCreate(ctx) {
     if (existed) {
       ctx.body = { success: true, skipped: true };
       return;
+    }
+
+    if (!notificationData.productImage) {
+      notificationData.productImage = await getProductImageFromLineItem({
+        shop,
+        lineItem: order.line_items?.[0]
+      });
     }
 
     // Create notification in the database if it doesn't exist

@@ -1,5 +1,5 @@
 (function() {
-  const BASE_URL = 'https://hawk-old-roll-jumping.trycloudflare.com/scripttag';
+  const BASE_URL = 'https://characteristic-patrick-superb-usd.trycloudflare.com/scripttag';
 
   const scriptElement = document.createElement('script');
   scriptElement.type = 'text/javascript';

@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import React from 'preact';
 import './NotificationWidget.module.scss';
 import { formatRelativeDate } from '@assets/helpers/utils/formatFullTime.js';
 

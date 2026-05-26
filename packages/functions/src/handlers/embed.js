@@ -11,9 +11,9 @@ import fs from 'fs/promises';
 
 console.log('NODE_ENV', process.env.NODE_ENV);
 
-if (process.env.NODE_ENV === 'development') {
-  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-}
+// if (process.env.NODE_ENV === 'development') {
+//   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+// }
 
 // Initialize all demand configuration for an application
 const app = new App();
@@ -30,9 +30,9 @@ app.use(createErrorHandler());
 app.use(async ctx => {
   const shop = ctx.query.shop;
   ctx.set('Content-Security-Policy', `frame-ancestors https://${shop} https://admin.shopify.com;`);
-  if (process.env.NODE_ENV === 'development') {
-    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-  }
+  // if (process.env.NODE_ENV === 'development') {
+  //   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+  // }
 
   const embedHtml = await getEmbedTemplate(ctx);
 

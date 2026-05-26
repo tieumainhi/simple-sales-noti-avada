@@ -55,7 +55,6 @@ export default function Notifications() {
   function handleNext() {
     const lastNotification = notifications[notifications.length - 1];
     if (!lastNotification?.id) return;
-
     fetchNotifications({ after: lastNotification.id });
   }
 

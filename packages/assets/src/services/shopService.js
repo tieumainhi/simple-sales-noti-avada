@@ -3,7 +3,7 @@
  * @param {ShopInfo} shopInfo
  * @return {*&{shopifyPhone: (string|string), createdAt: *, shopifyPlan: *, shopifyCountry: string, timezone: *, shopAddress: string}}
  */
-export function collectActiveShopData({shop, shopInfo}) {
+export function collectActiveShopData({ shop, shopInfo }) {
   return {
     ...shop,
     shopifyPlan: shopInfo?.planName,

@@ -1,21 +1,21 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
 client_id = "8f8bbded4ff7c7628cbd185e81129574"
-application_url = "https://example.com"
-embedded = true
 name = "Simple Sales Notifications"
+application_url = "https://characteristic-patrick-superb-usd.trycloudflare.com/embed"
+embedded = true
+
+[build]
+automatically_update_urls_on_dev = true
+
+[webhooks]
+api_version = "2026-04"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "read_products,write_script_tags,read_script_tags,write_themes,read_themes,read_orders"
+scopes = "read_orders,read_products,read_script_tags,read_themes,write_script_tags,write_themes"
 optional_scopes = [ ]
 use_legacy_install_flow = false
 
 [auth]
 redirect_urls = [ ]
-
-[webhooks]
-api_version = "2026-04"
-
-[build]
-automatically_update_urls_on_dev = true
